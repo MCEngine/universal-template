@@ -17,11 +17,13 @@ by the `lxagents-agents-base` connector. It declares no overrides.
 `wiki/information/overview.md`, `wiki/environments/setup.md`,
 `wiki/information/architecture.md`, `wiki/logs/0/0/0/CHANGELOG.md`, `README.md`, `LICENSE`,
 the Gradle skeleton — `settings.gradle`, `build.gradle`, `gradle.properties`,
-`.gitattributes`, and the committed wrapper pinning Gradle 9.5.0 — and the `api/` and
-`common/` modules, which build and test green (11 tests).
+`.gitattributes`, and the committed wrapper pinning Gradle 9.5.0 — the `api/` and `common/`
+modules, and the five `platforms/bukkit/` modules. All of it builds and tests green: 20
+tests, zero deprecation warnings under `--warning-mode all`, and
+`build/libs/TemplateEngine-0.0.0.jar` at the repository root carrying exactly one
+`plugin.yml` and one `config.yml`.
 
-**Does not exist yet:** the five `platforms/bukkit/` modules, the seven `platforms/mods/`
-modules, and `PROMPT.md`.
+**Does not exist yet:** the seven `platforms/mods/` modules and `PROMPT.md`.
 
 ## Stack
 
@@ -33,5 +35,5 @@ fabric-loom and ModDevGradle produce the mod jars. Minecraft target 26.1.2.
 
 ## Next step
 
-Task 5 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
-the Bukkit platform modules. The tasks are stacked branches and run strictly in order.
+Task 6 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
+the mod platform modules. The tasks are stacked branches and run strictly in order.

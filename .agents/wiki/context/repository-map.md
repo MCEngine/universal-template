@@ -27,12 +27,15 @@ there once, and this page links rather than repeats them.
 | `gradlew`, `gradlew.bat`, `gradle/wrapper/` | The committed wrapper, pinning Gradle 9.5.0. |
 | `api/` | The shared contract. Interfaces, records, enums, one abstract dispatcher. No dependencies. |
 | `common/` | The implementation, plus `TemplateProvider` at the namespace root — the only supported way in. |
+| `platforms/bukkit/core/` | `AbstractTemplatePlugin`, the scheduler abstraction, the command, the listener, and the one `config.yml`. |
+| `platforms/bukkit/{spigotmc,papermc,foliamc}/` | One entry point class each, plus a `plugin.yml`. |
+| `platforms/bukkit/engine/` | `TemplateEngine`: the universal jar, shaded, written to the root `build/libs/`. |
 
 ## What does not exist yet
 
-The five `platforms/bukkit/` modules, the seven `platforms/mods/` modules, and `PROMPT.md`.
-`./gradlew build` currently builds `api` and `common` only. The intended layout, the
-identity values and the ordered task list are all recorded in
+The seven `platforms/mods/` modules and `PROMPT.md`. `./gradlew build` currently builds the
+shared modules and the whole Bukkit side. The intended layout, the identity values and the
+ordered task list are all recorded in
 [`../../memory/tasks/universal-plugin-template.md`](../../memory/tasks/universal-plugin-template.md).
 **Do not infer the build from this page** — it is updated by each task as that task makes
 something true, so anything absent here is genuinely absent from the repository.
@@ -74,3 +77,15 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
   `TemplateProvider`. If the facade does not expose what you need, add a method to it.
 * **`AbstractTemplateService.handle` has no `default` branch on purpose.** Adding a
   `TemplateAction` constant is meant to break the build until every platform handles it.
+* **A platform entry point declares `createScheduler` and nothing else.** A test in each
+  module asserts exactly that. Shared logic goes in `platforms/bukkit/core`.
+* **The three platform modules are `compileOnly` on api, common and core, with
+  `jar { enabled = false }`.** Only the engine shades them. Changing either would put a
+  second copy of every class in the universal jar.
+* **`config.yml` exists once**, in `platforms/bukkit/core/src/main/resources/`, and each
+  platform module adds that directory as an extra resource source. Do not copy it.
+* **Use `property = value`, never `property value`, in build scripts.** The space form is
+  deprecated and is removed in Gradle 10. The build is checked with `--warning-mode all`.
+* **Plugin versions live in `pluginManagement` in `settings.gradle`**, read from
+  `gradle.properties`. A module writes `id 'com.gradleup.shadow'` with no version, because
+  a `plugins {}` block accepts only constant expressions.

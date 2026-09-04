@@ -129,3 +129,35 @@ and there are no subprojects — which is expected until task 4.
 
 Next task depends on: the identity properties in `gradle.properties`, which task 4 reads to
 place its packages.
+
+### Task 4 — feat/shared-modules
+
+Added the two shared modules and wired them into `settings.gradle`.
+
+`api` holds the contract and depends on nothing: `TemplateAction` (the wire vocabulary),
+`TemplateRequest` and `TemplateResponse` (records; the request normalizes a missing payload
+to the empty string so no handler null-checks it), `TemplateService`, and
+`AbstractTemplateService`. The dispatch switch has no `default` branch deliberately —
+adding an action breaks the build until every platform handles it, rather than failing at
+runtime on whichever platform saw it first.
+
+`common` holds `DefaultTemplateService` and, at the **root of the namespace**,
+`TemplateProvider` — the single entry point. It holds its service privately and returns it
+from no method, so there is no supported way around it. Exactly one `package-info.java` per
+module, at each module's root package, as specified.
+
+Added `wiki/information/architecture.md` now that there is real architecture to describe,
+and its index row.
+
+Verified: `./gradlew build` succeeds; 11 tests pass across `TemplateProviderTest` and
+`TemplateRequestTest` with no failures; `javap` reports bytecode major version 69, which
+confirms Gradle provisioned and used JDK 25 through the foojay resolver rather than falling
+back to the container's JDK 21. Jars are named `universal-template-api-0.0.0.jar` and
+`universal-template-common-0.0.0.jar`.
+
+Not done, deliberately: no `maven-publish` configuration. The reference repository publishes
+its shared modules to GitHub Packages, but that was not part of the requested structure, so
+it is raised as a discovery finding instead of added unasked.
+
+Next task depends on: `TemplateProvider` and the contract types, which every Bukkit module
+compiles against.

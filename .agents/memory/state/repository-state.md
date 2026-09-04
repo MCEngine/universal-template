@@ -15,13 +15,13 @@ by the `lxagents-agents-base` connector. It declares no overrides.
 **Exists:** `AGENTS.md`, `.claude/CLAUDE.md`, the six indexes under `.agents/index/`,
 `.agents/rules/repository.md`, `.agents/wiki/context/repository-map.md`, this memory tree,
 `wiki/information/overview.md`, `wiki/environments/setup.md`,
-`wiki/logs/0/0/0/CHANGELOG.md`, `README.md`, `LICENSE`, and the Gradle skeleton —
-`settings.gradle`, `build.gradle`, `gradle.properties`, `.gitattributes`, and the committed
-wrapper pinning Gradle 9.5.0.
+`wiki/information/architecture.md`, `wiki/logs/0/0/0/CHANGELOG.md`, `README.md`, `LICENSE`,
+the Gradle skeleton — `settings.gradle`, `build.gradle`, `gradle.properties`,
+`.gitattributes`, and the committed wrapper pinning Gradle 9.5.0 — and the `api/` and
+`common/` modules, which build and test green (11 tests).
 
-**Does not exist yet:** the `api/` and `common/` modules, the five `platforms/bukkit/`
-modules, the seven `platforms/mods/` modules, and `PROMPT.md`. `settings.gradle` includes no
-modules yet.
+**Does not exist yet:** the five `platforms/bukkit/` modules, the seven `platforms/mods/`
+modules, and `PROMPT.md`.
 
 ## Stack
 
@@ -33,6 +33,5 @@ fabric-loom and ModDevGradle produce the mod jars. Minecraft target 26.1.2.
 
 ## Next step
 
-Task 4 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
-the shared `api/` and `common/` modules. The tasks are stacked branches and run strictly in
-order.
+Task 5 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
+the Bukkit platform modules. The tasks are stacked branches and run strictly in order.

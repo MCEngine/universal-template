@@ -28,6 +28,13 @@ memory.
 * **Versions.** Never edit `project-version` in `gradle.properties` on your own initiative,
   and never create a `wiki/logs/{Major}/{Minor}/{Patch}/` directory unasked — that is itself
   a version claim. See `{shared}/rules/versioning.md`.
+* **Module boundaries.** `api` depends on nothing and holds only interfaces, records, enums,
+  and abstract classes. `common` holds the implementation. Platform modules reach the
+  implementation only through `io.github.mcengine.universaltemplate.TemplateProvider` and
+  never import from `...universaltemplate.common`. See
+  [`../../wiki/information/architecture.md`](../../wiki/information/architecture.md).
+* **One package-info per shared module.** `api` and `common` each carry exactly one, at the
+  module's root package. Do not add more, and do not create sub-packages that would want one.
 * **Docs and indexes.** Keep both wiki trees current with any structural change, and update
   the index that owns the changed scope in the same commit. See
   `{shared}/creators/index-creator.md` and `{shared}/rules/change-propagation.md`.
@@ -50,9 +57,9 @@ for the modules you touched — `./gradlew build`, plus `-Pmods=true` when the c
 
 ## Current state
 
-The instruction, knowledge and memory systems exist, and so does the Gradle skeleton:
-`settings.gradle`, the root `build.gradle`, `gradle.properties`, and the committed wrapper.
-The source modules do not yet — they are the remaining tasks in
+The instruction, knowledge and memory systems exist, the Gradle skeleton is in place, and
+the shared `api` and `common` modules build and test green. The platform modules do not
+exist yet — they are the remaining tasks in
 [`../memory/tasks/universal-plugin-template.md`](../memory/tasks/universal-plugin-template.md).
 This section, and the repository map, are updated by each task that changes what is true.
 

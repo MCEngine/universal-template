@@ -27,13 +27,15 @@ tests, zero deprecation warnings under `--warning-mode all`, and
 
 ## Stack
 
-Gradle 9.5.0 multi-project with the configuration cache on. **One Java 25 toolchain for
-every module, mods included** — Mojang's version manifest gives Minecraft 26.1.2 a
-`javaVersion` of 25, so the earlier plan to split the mod modules onto Java 21 was dropped
-before any of it was written. `com.gradleup.shadow` produces the Bukkit engine jar;
-fabric-loom and ModDevGradle produce the mod jars. Minecraft target 26.1.2.
+Gradle 9.5.0 multi-project with the configuration cache on. **One Java 21 toolchain for
+every module, mods included**, and the Gradle daemon itself pinned to 21 in
+`gradle/gradle-daemon-jvm.properties` because Loom checks the daemon's version rather than
+the toolchain's. `com.gradleup.shadow` produces the Bukkit engine jar; fabric-loom and
+ModDevGradle produce the mod jars. **Minecraft target 1.21.11** — not a 26.x release, which
+publishes no obfuscation mappings and therefore supports no mod toolchain at all. See
+[`../decisions/minecraft-target-version.md`](../decisions/minecraft-target-version.md).
 
 ## Next step
 
-Task 6 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
+Task 7 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
 the mod platform modules. The tasks are stacked branches and run strictly in order.

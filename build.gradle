@@ -35,7 +35,7 @@ subprojects {
     apply plugin: 'java'
 
     java {
-        // Minecraft 26.1.2 requires Java 25, so one toolchain covers every
+        // Minecraft 1.21.11 requires Java 21, so one toolchain covers every
         // module including the mods. Gradle downloads it through the foojay
         // resolver declared in settings.gradle if it is not installed.
         toolchain {

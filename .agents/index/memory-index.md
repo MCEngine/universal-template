@@ -33,3 +33,4 @@ protocol's approval gate. See `{shared}/rules/memory-policy.md`.
 | [`decisions/prompt-file-at-root.md`](../memory/decisions/prompt-file-at-root.md) | Why `PROMPT.md` sits at the repository root against the directory rule. |
 | [`decisions/session-trailer-stripped.md`](../memory/decisions/session-trailer-stripped.md) | Why the harness session trailer is stripped from commits and pull requests. |
 | [`decisions/template-identity-values.md`](../memory/decisions/template-identity-values.md) | The namespace, plugin id, version and Minecraft target chosen for the template, and why. |
+| [`decisions/minecraft-target-version.md`](../memory/decisions/minecraft-target-version.md) | Why the target is 1.21.11 and not a 26.x release, and what to check before retargeting. |

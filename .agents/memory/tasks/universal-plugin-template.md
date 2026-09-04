@@ -161,3 +161,49 @@ it is raised as a discovery finding instead of added unasked.
 
 Next task depends on: `TemplateProvider` and the contract types, which every Bukkit module
 compiles against.
+
+### Task 5 — feat/bukkit-platforms
+
+Added the whole Bukkit side: `platforms/bukkit/{core,spigotmc,papermc,foliamc,engine}`.
+
+`core` carries `AbstractTemplatePlugin`, the `PlatformScheduler`/`PlatformTask`/`Schedulers`
+abstraction with the Bukkit implementation, the `/template` command, the join listener, and
+the single `config.yml`. Each platform module adds core's resources directory as an extra
+resource source rather than copying `config.yml` four times.
+
+Each platform entry point is a scheduler choice and nothing else, and a structure test in
+each module asserts it declares exactly one method — so platform-specific logic cannot
+quietly accumulate in three places. `TemplateEngine` probes for classes at enable time
+(`RegionizedServer` → Folia, `PaperConfig` → Paper, else Spigot) and compiles against the
+Folia API alone, because Spigot, Paper and Folia all provide the same Gradle capability and
+cannot be declared together.
+
+Nothing in the plugin descriptors is hardcoded: `processResources` builds `main:` from
+`namespace` and `pluginid`, and the command name from `pluginid` lowercased.
+`AbstractTemplatePlugin` reads it back with `getCommand(getName().toLowerCase())`, so
+renaming a fork leaves no stale string behind.
+
+**Two build problems found and fixed, both worth recording.**
+
+1. A `plugins {}` block accepts only constant expressions, so
+   `id 'com.gradleup.shadow' version providers.gradleProperty(...)` fails to evaluate.
+   Plugin versions now live in a `pluginManagement { plugins { } }` block in
+   `settings.gradle`, read from `gradle.properties`, and modules declare a bare id. A line
+   break between `version` and its argument also breaks Groovy parsing — it must stay on
+   one line.
+2. `filteringCharset 'UTF-8'`, copied from the reference repository's style, is deprecated
+   space-assignment syntax that Gradle 10 removes. Changed to `filteringCharset = 'UTF-8'`
+   in all four modules. `./gradlew clean build --warning-mode all` now reports zero
+   deprecations, and that is the standard to hold — a template that ships a warning hands
+   it to every fork.
+
+Verified: `./gradlew build` green; 20 tests pass across five test classes with no failures;
+`build/libs/TemplateEngine-0.0.0.jar` exists at the repository root and contains exactly one
+`plugin.yml` and one `config.yml`, the descriptor's `main` correctly expanded to
+`io.github.mcengine.universaltemplate.bukkit.engine.TemplateEngine`, and every one of the
+five `bukkit.*` packages plus `api` and `common`. The three platform jars are named
+`TemplateSpigotMC/PaperMC/FoliaMC-0.0.0.jar` and stay in their own module directories, as
+intended.
+
+Next task depends on: the contract types in `api`, which the mod modules share with the
+Bukkit side over the message channel.

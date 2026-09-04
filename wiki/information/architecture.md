@@ -13,8 +13,76 @@ the project *is*, see [Project Overview](overview.md); for building it, see
 | `api` | `io.github.mcengine.universaltemplate.api` | The shared contract: interfaces, records, enums, and one abstract dispatcher. No dependencies at all. |
 | `common` | `io.github.mcengine.universaltemplate` and `.common` | The implementation, plus the single public facade `TemplateProvider`. |
 
-The remaining modules — the Bukkit platforms and the mods — are added by later tasks and
-documented here as they land.
+| `platforms/bukkit/core` | `...bukkit.core` | `AbstractTemplatePlugin`, the scheduler abstraction, the command, and the listener. |
+| `platforms/bukkit/spigotmc` | `...bukkit.spigotmc` | `TemplateSpigotMC` — the entry point, and nothing else. |
+| `platforms/bukkit/papermc` | `...bukkit.papermc` | `TemplatePaperMC`. |
+| `platforms/bukkit/foliamc` | `...bukkit.foliamc` | `TemplateFoliaMC` and `FoliaPlatformScheduler`. |
+| `platforms/bukkit/engine` | `...bukkit.engine` | `TemplateEngine` — the universal jar that bundles all three. |
+
+The mod modules are added by a later task and documented here as they land.
+
+## The Bukkit side
+
+### One bootstrap, three entry points
+
+Enabling, config, command and listener registration, and starting the service are identical
+on all three servers, so they live once in `AbstractTemplatePlugin`. Each platform module
+supplies only its scheduler:
+
+```java
+public class TemplateSpigotMC extends AbstractTemplatePlugin {
+    @Override
+    protected PlatformScheduler createScheduler() {
+        return new BukkitPlatformScheduler(this);
+    }
+}
+```
+
+That is the entire class. A test in each module asserts it declares exactly one method, so
+platform-specific logic cannot quietly accumulate in three places.
+
+### The scheduler abstraction
+
+Shared code compiles against the plain `spigot-api` and so cannot name Paper's
+`AsyncScheduler` or Folia's region schedulers. `PlatformScheduler` is the seam.
+
+Its signatures are shaped by Folia, the strictest platform: Folia spreads the world across
+threads, so an entity may move to another thread — or stop existing — between scheduling
+work and running it. `runForEntity` therefore takes a `retired` callback that Spigot and
+Paper never invoke. Designing for the strictest case costs the others nothing.
+
+### The universal engine jar
+
+`TemplateEngine` detects the server at enable time by probing for classes —
+`io.papermc.paper.threadedregions.RegionizedServer` means Folia,
+`com.destroystokyo.paper.PaperConfig` means Paper, otherwise Spigot — and installs the
+matching scheduler.
+
+It probes rather than compiling against all three APIs because it cannot do the latter:
+Spigot, Paper, and Folia all provide the same Gradle capability, so declaring them together
+is a dependency conflict Gradle rejects. The module compiles against the Folia API alone,
+which is a superset of the other two.
+
+The three platform modules declare `api`, `common`, and `core` as `compileOnly` and disable
+their thin jar. Only the engine shades them, so the universal jar holds exactly one copy of
+every class. The engine's shadow configuration also strips the `plugin.yml` out of each
+bundled platform jar, keeping only its own, so the shipped jar has a single descriptor.
+
+### Jar outputs
+
+| Jar | Built to | Distributed |
+|---|---|---|
+| `TemplateEngine-{version}.jar` | `build/libs/` at the repository root | Yes |
+| `TemplateSpigotMC-{version}.jar` etc. | The module's own `build/libs/` | No — bundled into the engine |
+| `universal-template-api/common/bukkit-core-{version}.jar` | The module's own `build/libs/` | No |
+
+### Renaming stays a one-file edit
+
+Class names are the only thing a fork edits by hand. Everything else is derived from
+`gradle.properties`: the package from `orgname` and `reponame`, the jar base names and the
+plugin name from `pluginid`, and the command name from `pluginid` lowercased. The plugin
+descriptor's `main:` is built in `processResources` from those same properties, so no
+`plugin.yml` hardcodes a package.
 
 ## The shared contract
 

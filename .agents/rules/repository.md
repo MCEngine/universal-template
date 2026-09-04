@@ -58,8 +58,9 @@ for the modules you touched — `./gradlew build`, plus `-Pmods=true` when the c
 ## Current state
 
 The instruction, knowledge and memory systems exist, the Gradle skeleton is in place, and
-the shared `api` and `common` modules build and test green. The platform modules do not
-exist yet — they are the remaining tasks in
+the shared modules plus the entire Bukkit side build and test green — including the
+universal `TemplateEngine-0.0.0.jar` in the root `build/libs/`. The mod modules and
+`PROMPT.md` do not exist yet — they are the remaining tasks in
 [`../memory/tasks/universal-plugin-template.md`](../memory/tasks/universal-plugin-template.md).
 This section, and the repository map, are updated by each task that changes what is true.
 

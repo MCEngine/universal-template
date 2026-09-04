@@ -1,4 +1,6 @@
 def orgName = providers.gradleProperty('orgname').get()
+def repoName = providers.gradleProperty('reponame').get()
+def pluginIdValue = providers.gradleProperty('pluginid').get()
 def projectVersion = providers.gradleProperty('project-version').get()
 def javaVersion = providers.gradleProperty('java-version').get() as Integer
 
@@ -7,6 +9,15 @@ allprojects {
     // source: the orgname property. See PROMPT.md.
     group = "io.github.${orgName}"
     version = projectVersion
+
+    ext {
+        // Every module that names a package or a jar reads these rather than
+        // hardcoding the values, so renaming a fork stays a gradle.properties
+        // edit.
+        pluginId = pluginIdValue
+        namespace = "io.github.${orgName}.${repoName}"
+        commandName = pluginIdValue.toLowerCase()
+    }
 
     repositories {
         mavenCentral()

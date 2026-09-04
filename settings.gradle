@@ -1,7 +1,22 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    // Plugin versions are declared once here, read from gradle.properties, so a
+    // module can write `id 'com.gradleup.shadow'` with no version and a fork
+    // retargets everything from one file. The plugins {} block itself accepts
+    // only constant expressions, which is why the versions cannot be read there.
+    plugins {
+        id 'org.gradle.toolchains.foojay-resolver-convention' version providers.gradleProperty('foojay-resolver-version').get()
+        id 'com.gradleup.shadow' version providers.gradleProperty('shadow-version').get()
+    }
+}
+
 plugins {
     // Lets Gradle download the Java 25 toolchain rather than requiring it to be
     // installed already.
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+    id 'org.gradle.toolchains.foojay-resolver-convention'
 }
 
 rootProject.name = 'universal-template'
@@ -13,3 +28,11 @@ rootProject.name = 'universal-template'
 // Shared contract and its implementation. Every platform depends on these.
 include 'api'
 include 'common'
+
+// Bukkit server plugin: shared core, three platform entry points, and the
+// universal engine jar that bundles all three.
+include 'platforms:bukkit:core'
+include 'platforms:bukkit:spigotmc'
+include 'platforms:bukkit:papermc'
+include 'platforms:bukkit:foliamc'
+include 'platforms:bukkit:engine'

@@ -3,7 +3,7 @@ version: ${version}
 main: ${main}
 api-version: '${apiVersion}'
 folia-supported: true
-author: MCEngine
+author: ${author}
 description: Universal plugin template for SpigotMC, PaperMC and Folia
 commands:
   ${command}:

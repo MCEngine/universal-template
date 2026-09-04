@@ -326,3 +326,36 @@ matching. No stale package survived anywhere outside `build/`.
 
 Next task depends on: this layout. `PROMPT.md` rewrites `namespaceSegment`, `pluginIdValue`,
 the package directories and the class names in one pass.
+
+### Task 9 — docs/template-prompt
+
+Added `PROMPT.md` at the repository root and wired it into `AGENTS.md`.
+
+It is an **interactive** setup procedure, not a checklist to read. It asks, in one message,
+for the plugin id, the starting version, the GitHub organization and repository, the license
+type with holder and year, the group and namespace (offering the derived defaults), what the
+project actually is for `README.md` and `wiki/`, and whether the fork wants custom rules or
+trigger rows in `AGENTS.md`. Only then does it rename anything, because a half-applied
+rename still builds and is worse than none.
+
+It then states exactly what changes and where: two build values, the 19 package directories,
+the 28 `Template*` types, and the three string literals the build cannot reach — the channel
+`NAMESPACE` constant and the two `@Mod` ids, which are Java annotations. It ends by deleting
+itself and its own `AGENTS.md` row, in the same commit as the setup work.
+
+**Shrank the manual surface first.** `author` and `issueTrackerURL` were literal `MCEngine`
+and a literal GitHub URL in ten descriptor files. Both now derive from `git-org-name` and
+`git-repository-name` through `processResources`, so no `plugin.yml`, `fabric.mod.json` or
+`.toml` needs editing by a fork at all. That is ten files off the checklist, and ten fewer
+places for a fork's name to be half-changed.
+
+`PROMPT.md` also records that this template's "version is fixed at 0.0.0" rule is a
+template-only rule and must be removed from a fork, which does release.
+
+Verified: `./gradlew clean build --warning-mode all` green, zero deprecations, 26 tests; the
+engine jar's `plugin.yml` shows `author: MCEngine` resolved from the property; no `MCEngine`
+literal remains in any `.yml`, `.json` or `.toml`. The root now holds `AGENTS.md`,
+`PROMPT.md`, `README.md` and `LICENSE` — `PROMPT.md` being the declared exception to the
+shared directory rule, recorded in `.agents/memory/decisions/prompt-file-at-root.md`.
+
+Next task depends on: nothing. Task 10 closes the record.

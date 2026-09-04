@@ -1,4 +1,5 @@
 def gitOrgName = providers.gradleProperty('git-org-name').get()
+def gitRepositoryName = providers.gradleProperty('git-repository-name').get()
 def projectVersion = providers.gradleProperty('project-version').get()
 def javaVersion = providers.gradleProperty('java-version').get() as Integer
 
@@ -21,6 +22,12 @@ allprojects {
         pluginId = pluginIdValue
         namespace = "io.github.${gitOrgName.toLowerCase()}.${namespaceSegment}"
         commandName = pluginIdValue.toLowerCase()
+
+        // The plugin and mod descriptors read these rather than spelling the
+        // owner out again, so a fork changes them in gradle.properties only.
+        author = gitOrgName
+        issueTrackerUrl = "https://github.com/${gitOrgName}/${gitRepositoryName}/issues"
+
     }
 
     repositories {

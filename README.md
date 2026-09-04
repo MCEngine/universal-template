@@ -15,6 +15,12 @@ Bukkit server plugin and standalone mods, over a single shared contract.
 - Renaming is one guided pass: `PROMPT.md` asks what your project is, rewrites the build,
   the sources and the docs, and then deletes itself.
 
+## Forking this template
+
+Run [`PROMPT.md`](PROMPT.md). It asks what your project is — plugin id, version,
+organization and repository, license, group and namespace, and what the docs should say —
+rewrites the build, the Java tree and the documentation to match, and then deletes itself.
+
 ## Quick start
 
 ```bash

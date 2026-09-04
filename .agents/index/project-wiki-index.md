@@ -18,3 +18,9 @@ are plain markdown with no frontmatter. This index never writes into `.agents/`.
 | File | Purpose |
 |---|---|
 | [`information/overview.md`](../../wiki/information/overview.md) | What this template is, what it will contain, and what a fork does with it. |
+
+## Environments
+
+| File | Purpose |
+|---|---|
+| [`environments/setup.md`](../../wiki/environments/setup.md) | Requirements, the build commands, how to opt into the mod modules, and where the jars land. |

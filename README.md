@@ -17,9 +17,17 @@ Bukkit server plugin and standalone mods, over a single shared contract.
 
 ## Quick start
 
-The Gradle build is not in place yet; it is being added task by task. Until it lands, see
+```bash
+./gradlew build                 # compile every module and run the tests
+./gradlew -Pmods=true build     # the same, including the Forge, Fabric and NeoForge mods
+```
+
+Jars land in `build/libs/` at the repository root. You need no local Gradle and no local
+JDK 25 — the wrapper is committed and the toolchain is downloaded on first build.
+
+The source modules are still being added task by task; see
 `.agents/wiki/context/repository-map.md` for exactly what the repository does and does not
-contain.
+contain right now.
 
 ## Documentation
 
@@ -29,6 +37,8 @@ Start here:
 
 - [Project Overview](wiki/information/overview.md) — what this template is, why both halves
   share one repository, and what a fork changes.
+- [Local Setup](wiki/environments/setup.md) — requirements, build commands, and where the
+  jars go.
 
 ## Working with agents
 

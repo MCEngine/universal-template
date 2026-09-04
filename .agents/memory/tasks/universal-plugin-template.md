@@ -82,3 +82,26 @@ the same commit that adds it. Task 1 therefore creates the root router with its 
 and the memory index; task 2 adds the remaining indexes and their rows to the root table.
 
 Next task depends on: nothing beyond this record.
+
+### Task 2 — docs/agents-setup
+
+Adopted the shared instruction set as a **Mode B consumer**, declaring no overrides.
+
+Created `AGENTS.md` (connector bootstrap verbatim, auto-activation contract, trigger table
+mirrored row for row from `{shared}/rules/auto-activation.md`, reading order, routing
+protocol, iron rule, discovery protocol, version and session-link rules); `.claude/CLAUDE.md`
+as an import of `../AGENTS.md` and nothing else; the five remaining indexes under
+`.agents/index/`; `.agents/rules/repository.md`; `.agents/wiki/context/repository-map.md`;
+the memory state file and three decision records; `wiki/information/overview.md`; and
+`wiki/logs/0/0/0/CHANGELOG.md`. Rewrote `README.md` as an overview, moving its detail into
+the wiki page rather than deleting it. `LICENSE` was already MIT and was left alone.
+
+**Only the mandatory core set was created.** The `agents-setup` procedure gates optional
+local instruction files behind a user selection, and the discovery protocol gates instruction
+files generally, so the candidates this project would earn — build and shading rules, a
+platform entry-point SOP, the mod channel protocol — are held as findings to present at the
+end of the work rather than written unasked. `AGENTS.md` therefore carries no repository-specific
+trigger rows yet, and says so where the rows would go.
+
+Next task depends on: nothing. The repository map and `repository.md` both state plainly that
+no build exists yet, so task 3 updates them as it makes that false.

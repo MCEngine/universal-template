@@ -16,8 +16,12 @@ dropping an override updates the override table below in the same commit.
 
 | Index | Scope | Load when |
 |---|---|---|
+| [`agents-index.md`](agents-index.md) | This repository's instruction set | You need a rule specific to this repository. |
 | `{shared}/index/root-index.md` | The shared instruction set, served by the `lxagents-agents-base` connector | You need a branching, commit, pull request, planning, placement, versioning, or creator convention. |
+| [`agent-wiki-index.md`](agent-wiki-index.md) | `.agents/wiki/` agent knowledge | You need orientation, an SOP, or a domain guideline written for agents. |
+| [`project-wiki-index.md`](project-wiki-index.md) | `wiki/` human documentation | You need to read or write documentation a person will read. |
 | [`memory-index.md`](memory-index.md) | `.agents/memory/` dynamic state | You need prior task state, a recorded decision, or must record progress. |
+| [`logs-index.md`](logs-index.md) | `wiki/logs/` versioned change logs | You need release history or must record a change. |
 
 ## Shared overrides
 

@@ -31,11 +31,13 @@ there once, and this page links rather than repeats them.
 | `platforms/bukkit/core/` | `AbstractTemplatePlugin`, the scheduler abstraction, the command, the listener, and the one `config.yml`. |
 | `platforms/bukkit/{spigotmc,papermc,foliamc}/` | One entry point class each, plus a `plugin.yml`. |
 | `platforms/bukkit/engine/` | `TemplateEngine`: the universal jar, shaded, written to the root `build/libs/`. |
+| `platforms/mods/core/` | `TemplateChannel` and `TemplatePayloadCodec`. No Minecraft dependency, always in the build. |
+| `platforms/mods/{forge,fabric,neoforge}/{client,server}/` | Six loader modules, built only under `-Pmods=true`. |
 
 ## What does not exist yet
 
-The seven `platforms/mods/` modules and `PROMPT.md`. `./gradlew build` currently builds the
-shared modules and the whole Bukkit side. The intended layout, the identity values and the
+`PROMPT.md`. `./gradlew build` builds the shared modules, the whole Bukkit side, and
+`platforms/mods/core`. The intended layout, the identity values and the
 ordered task list are all recorded in
 [`../../memory/tasks/universal-plugin-template.md`](../../memory/tasks/universal-plugin-template.md).
 **Do not infer the build from this page** — it is updated by each task as that task makes
@@ -85,6 +87,17 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
   second copy of every class in the universal jar.
 * **`config.yml` exists once**, in `platforms/bukkit/core/src/main/resources/`, and each
   platform module adds that directory as an extra resource source. Do not copy it.
+* **The client half of a mod decides nothing.** It sends and renders; the server owns the
+  state and takes the player id from the connection, never from the payload. Do not move a
+  decision to the client to save a round trip.
+* **`TemplateAction` is encoded by name, not ordinal.** Reordering the enum must not change
+  the wire format.
+* **The payload wrapper is duplicated per loader on purpose** — `CustomPayload` is a
+  Minecraft type, and Fabric sees it under Yarn while Forge and NeoForge see it under Mojang
+  mappings. Only the wrapper is duplicated; the byte layout lives once in `mods/core`.
+* **ModDevGradle needs `maven.neoforged.net/mojang-meta`.** When that host is down, the
+  Forge and NeoForge modules cannot configure at all, while Fabric and the Bukkit side are
+  unaffected. Check it before assuming a build script is wrong.
 * **Use `property = value`, never `property value`, in build scripts.** The space form is
   deprecated and is removed in Gradle 10. The build is checked with `--warning-mode all`.
 * **Plugin versions live in `pluginManagement` in `settings.gradle`**, read from

@@ -19,7 +19,9 @@ the project *is*, see [Project Overview](overview.md); for building it, see
 | `platforms/bukkit/foliamc` | `...bukkit.foliamc` | `TemplateFoliaMC` and `FoliaPlatformScheduler`. |
 | `platforms/bukkit/engine` | `...bukkit.engine` | `TemplateEngine` — the universal jar that bundles all three. |
 
-The mod modules are added by a later task and documented here as they land.
+| `platforms/mods/core` | `...mod.core` | `TemplateChannel` and `TemplatePayloadCodec`. No Minecraft dependency. |
+| `platforms/mods/{forge,fabric,neoforge}/client` | `...mod.<loader>.client` | Sends actions; renders answers. |
+| `platforms/mods/{forge,fabric,neoforge}/server` | `...mod.<loader>.server` | Decodes, runs the service, replies. |
 
 ## The Bukkit side
 
@@ -137,3 +139,39 @@ platforms  <-  api, common   (never each other)
 `common` declares `api` with Gradle's `api` configuration rather than `implementation`, so a
 platform module that depends on `common` sees the contract types on its own compile
 classpath without redeclaring them.
+
+## The mod side
+
+### Six jars, not one
+
+Each loader builds its own jar, and each loader's jar is split into a client half and a
+server half. Merging loaders is not possible — they load classes differently and their APIs
+do not overlap — and merging the two halves would ship client rendering code to servers and
+server state to clients.
+
+The split is also a trust boundary. **The client decides nothing.** It sends an action and
+renders whatever comes back; the server owns the state. A modified client can send anything
+it likes and still cannot grant itself a result the server did not give it. The server takes
+the player's identity from the connection, never from the payload, for the same reason.
+
+### One wire format, shared
+
+`platforms/mods/core` holds `TemplateChannel` (the two channel identifiers) and
+`TemplatePayloadCodec` (the byte layout), and depends only on `api` and the JDK. Both halves
+of every loader encode and decode through it, so client and server cannot disagree about the
+format — the compiler and the codec's round-trip tests enforce it.
+
+The action is written **by name, not by ordinal**: reordering `TemplateAction` would
+otherwise silently change the meaning of every packet already in flight.
+
+What is duplicated per loader is only the payload wrapper, because `CustomPayload` is a
+Minecraft type and each loader sees it under different mappings — Fabric under Yarn, Forge
+and NeoForge under Mojang mappings via ModDevGradle. The wrapper is a few lines around a
+`byte[]`; the part that matters is shared.
+
+### Opt-in builds
+
+`./gradlew build` does not build the loader modules. `settings.gradle` includes them only
+under `-Pmods=true`, because Loom and ModDevGradle download and decompile Minecraft on first
+run. `platforms/mods/core` is always included: it needs no Minecraft, so the wire format
+keeps compiling even when the loaders are switched off.

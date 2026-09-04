@@ -25,11 +25,13 @@ there once, and this page links rather than repeats them.
 | `build.gradle` | Root build: derived group, the Java 25 toolchain applied to every module, and the root `clean`. |
 | `gradle.properties` | Every renameable identifier and every dependency version. The one file a fork edits. |
 | `gradlew`, `gradlew.bat`, `gradle/wrapper/` | The committed wrapper, pinning Gradle 9.5.0. |
+| `api/` | The shared contract. Interfaces, records, enums, one abstract dispatcher. No dependencies. |
+| `common/` | The implementation, plus `TemplateProvider` at the namespace root — the only supported way in. |
 
 ## What does not exist yet
 
-No source modules and no jars. The build skeleton is in place but `settings.gradle` includes
-nothing yet, so `./gradlew build` has no `build` task to run. The intended layout, the
+The five `platforms/bukkit/` modules, the seven `platforms/mods/` modules, and `PROMPT.md`.
+`./gradlew build` currently builds `api` and `common` only. The intended layout, the
 identity values and the ordered task list are all recorded in
 [`../../memory/tasks/universal-plugin-template.md`](../../memory/tasks/universal-plugin-template.md).
 **Do not infer the build from this page** — it is updated by each task as that task makes
@@ -66,3 +68,9 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
   fact.
 * **Configuration cache is on.** A task that closes over `project` at execution time will
   fail. Capture what you need at configuration time, as the root `clean` does.
+* **`api` takes no dependencies, ever.** The moment it depends on Bukkit or a mod loader it
+  stops being the thing all four platforms can share.
+* **Platform modules never import `...universaltemplate.common`.** They go through
+  `TemplateProvider`. If the facade does not expose what you need, add a method to it.
+* **`AbstractTemplateService.handle` has no `default` branch on purpose.** Adding a
+  `TemplateAction` constant is meant to break the build until every platform handles it.

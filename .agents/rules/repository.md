@@ -22,16 +22,22 @@ memory.
 * **Nothing shared is copied here.** A file readable from `agents://` must not exist in
   `.agents/` unless it is a declared override with a row in
   [`../index/root-index.md`](../index/root-index.md). There are currently no overrides.
-* **This is a template, not a plugin.** Every identifier a fork must rename is driven from
-  `gradle.properties`, not hardcoded across files. When you add something that carries the
-  organization name, repository name, or plugin id, drive it from a property.
-* **Versions.** Never edit `project-version` in `gradle.properties` on your own initiative,
-  and never create a `wiki/logs/{Major}/{Minor}/{Patch}/` directory unasked — that is itself
-  a version claim. See `{shared}/rules/versioning.md`.
+* **This is a template, not a plugin.** Nothing spells out the organization, the package or
+  the plugin id twice. `gradle.properties` carries `git-org-name` and `git-repository-name`;
+  the root `build.gradle` carries `namespaceSegment` and `pluginIdValue` and exposes
+  `namespace`, `pluginId` and `commandName` to every module. Anything you add that names the
+  project reads one of those. See
+  [`../memory/decisions/template-identity-values.md`](../memory/decisions/template-identity-values.md).
+* **The version never changes.** `project-version` stays `0.0.0` permanently — a template has
+  nothing to release. A fork sets its own version through `PROMPT.md`.
+* **Versions.** Never edit `project-version` on your own initiative, and never create a
+  `wiki/logs/{Major}/{Minor}/{Patch}/` directory unasked — that is itself a version claim.
+  See `{shared}/rules/versioning.md`. In this repository the answer is almost always no: the
+  version is fixed at `0.0.0`.
 * **Module boundaries.** `api` depends on nothing and holds only interfaces, records, enums,
   and abstract classes. `common` holds the implementation. Platform modules reach the
-  implementation only through `io.github.mcengine.universaltemplate.TemplateProvider` and
-  never import from `...universaltemplate.common`. See
+  implementation only through `io.github.mcengine.universal.TemplateProvider` and
+  never import from `...universal.common`. See
   [`../../wiki/information/architecture.md`](../../wiki/information/architecture.md).
 * **One package-info per shared module.** `api` and `common` each carry exactly one, at the
   module's root package. Do not add more, and do not create sub-packages that would want one.

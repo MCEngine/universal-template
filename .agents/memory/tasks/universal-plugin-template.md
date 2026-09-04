@@ -32,10 +32,10 @@ or pushed to `MCOriax/mcidentity`.
 | Decision | Value |
 |---|---|
 | Branching | Stacked task branches per `{shared}/git/branching-strategy.md` |
-| Namespace | `orgname=mcengine`, `reponame=universaltemplate` → `io.github.mcengine.universaltemplate` |
+| Namespace | `orgname=mcengine`, `reponame=universal` → `io.github.mcengine.universal` |
 | Plugin id | `Template` |
 | Initial version | `0.0.0` |
-| Central facade | `io.github.mcengine.universaltemplate.TemplateProvider`, at the namespace root |
+| Central facade | `io.github.mcengine.universal.TemplateProvider`, at the namespace root |
 | Mod builds | Opt-in, `-Pmods=true` |
 | Root `build/libs/` | The engine jar and the six mod jars only |
 | Minecraft target | 26.1.2, matching the reference repository |
@@ -208,7 +208,7 @@ renaming a fork leaves no stale string behind.
 Verified: `./gradlew build` green; 20 tests pass across five test classes with no failures;
 `build/libs/TemplateEngine-0.0.0.jar` exists at the repository root and contains exactly one
 `plugin.yml` and one `config.yml`, the descriptor's `main` correctly expanded to
-`io.github.mcengine.universaltemplate.bukkit.engine.TemplateEngine`, and every one of the
+`io.github.mcengine.universal.bukkit.engine.TemplateEngine`, and every one of the
 five `bukkit.*` packages plus `api` and `common`. The three platform jars are named
 `TemplateSpigotMC/PaperMC/FoliaMC-0.0.0.jar` and stay in their own module directories, as
 intended.
@@ -289,3 +289,40 @@ explicit `dependsOn configurations.bundled`, or Gradle fails with an implicit-de
 error; and only the server halves bundle `common`, because only they use `TemplateProvider`.
 
 Next task depends on: nothing. Task 8 renames the namespace across everything added here.
+
+### Task 8 — refactor/identity-properties
+
+Reworked where the template's identity lives, at the user's direction, and renamed the
+namespace.
+
+`gradle.properties` now carries only `git-org-name=MCEngine` and
+`git-repository-name=universal-template`; `orgname`, `reponame` and `pluginid` are gone. The
+Maven group is derived from the owner, lowercased. The two values that also appear in Java
+source — the package segment `universal` and the plugin id `Template` — moved to the top of
+the root `build.gradle`.
+
+**Why that split, since it reverses task 3.** Three of the old properties were also spelled
+out in the source tree: package directories, `package` and `import` statements, and the
+`Template*` class names. Gradle cannot rewrite any of that, so a fork had to do a
+source-wide rename *and* keep a properties file in step with it — two places with nothing
+checking they agree. Putting the two source-facing values in one build file, next to each
+other, makes the rename a single guided pass, which is what `PROMPT.md` will perform.
+
+Renamed the package `io.github.mcengine.universaltemplate` to
+`io.github.mcengine.universal` across 19 source directories and 47 files, with `git mv` so
+the history follows. The repository name and the package segment are deliberately different
+things now.
+
+Also recorded that **the version is fixed at `0.0.0` permanently** — a template has nothing
+to release — and rewrote the identity decision file, the repository rules, the repository
+map, and the three wiki pages that described the old model.
+
+Verified: `./gradlew clean build --warning-mode all` green with zero deprecations and 26
+tests; `./gradlew properties` reports `group: io.github.mcengine` and `version: 0.0.0`; the
+engine jar's descriptor resolves `main:` to
+`io.github.mcengine.universal.bukkit.engine.TemplateEngine`; both Fabric jars rebuild and
+contain only `io/github/mcengine/universal/`, with the entrypoint in `fabric.mod.json`
+matching. No stale package survived anywhere outside `build/`.
+
+Next task depends on: this layout. `PROMPT.md` rewrites `namespaceSegment`, `pluginIdValue`,
+the package directories and the class names in one pass.

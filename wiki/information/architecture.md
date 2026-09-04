@@ -10,8 +10,8 @@ the project *is*, see [Project Overview](overview.md); for building it, see
 
 | Module | Package | Contains |
 |---|---|---|
-| `api` | `io.github.mcengine.universaltemplate.api` | The shared contract: interfaces, records, enums, and one abstract dispatcher. No dependencies at all. |
-| `common` | `io.github.mcengine.universaltemplate` and `.common` | The implementation, plus the single public facade `TemplateProvider`. |
+| `api` | `io.github.mcengine.universal.api` | The shared contract: interfaces, records, enums, and one abstract dispatcher. No dependencies at all. |
+| `common` | `io.github.mcengine.universal` and `.common` | The implementation, plus the single public facade `TemplateProvider`. |
 
 | `platforms/bukkit/core` | `...bukkit.core` | `AbstractTemplatePlugin`, the scheduler abstraction, the command, and the listener. |
 | `platforms/bukkit/spigotmc` | `...bukkit.spigotmc` | `TemplateSpigotMC` — the entry point, and nothing else. |
@@ -80,11 +80,16 @@ bundled platform jar, keeping only its own, so the shipped jar has a single desc
 
 ### Renaming stays a one-file edit
 
-Class names are the only thing a fork edits by hand. Everything else is derived from
-`gradle.properties`: the package from `orgname` and `reponame`, the jar base names and the
-plugin name from `pluginid`, and the command name from `pluginid` lowercased. The plugin
-descriptor's `main:` is built in `processResources` from those same properties, so no
-`plugin.yml` hardcodes a package.
+A fork's rename is one guided pass, not a scattered edit. `gradle.properties` carries only
+the GitHub owner and repository name, from which the Maven group is derived. The two values
+that name the project in code — the package segment (`universal`) and the plugin id
+(`Template`) — sit at the top of the root `build.gradle`, next to each other, and every
+module reads them through `namespace`, `pluginId`, and `commandName`.
+
+So the plugin descriptor's `main:`, the jar base names, the mod ids, and the `/template`
+command are all generated. What a fork edits by hand is the package directories and the
+`Template*` class names, which no build system can rewrite for it — and `PROMPT.md` at the
+repository root walks through exactly that, then deletes itself.
 
 ## The shared contract
 
@@ -116,7 +121,7 @@ is a visible stall for every player online.
 ## One way in
 
 Every platform module reaches the implementation through
-`io.github.mcengine.universaltemplate.TemplateProvider`, and nothing else.
+`io.github.mcengine.universal.TemplateProvider`, and nothing else.
 
 The facade deliberately sits at the **root of the namespace**, one package above the
 `common` implementation classes it wraps, so someone opening the source tree meets the
@@ -125,7 +130,7 @@ service privately and returns it from no method, so there is no supported way to
 around it.
 
 The rule that follows: **a platform module never imports from
-`io.github.mcengine.universaltemplate.common`.** If a platform needs something the facade
+`io.github.mcengine.universal.common`.** If a platform needs something the facade
 does not expose, the fix is a method on the facade, not an import.
 
 ## Dependency rules

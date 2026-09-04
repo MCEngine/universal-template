@@ -38,10 +38,11 @@ failing in production.
 
 ## What a fork changes
 
-Three values in `gradle.properties` — the organization name, the repository name, and the
-plugin id. Everything derived from them (the Java package, the Maven group, class names, jar
-file names, the plugin descriptor) follows from those three. `PROMPT.md` at the repository
-root is the checklist.
+Run `PROMPT.md` at the repository root. It asks what the project is — plugin id, version,
+organization and repository, license, group and namespace, and what the README and wiki
+should say — applies the answers across the build, the sources and the documentation, and
+then deletes itself, because a setup prompt that stays behind is just clutter in someone
+else's repository.
 
 ## Current state
 

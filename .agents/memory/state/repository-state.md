@@ -23,7 +23,12 @@ tests, zero deprecation warnings under `--warning-mode all`, and
 `build/libs/TemplateEngine-0.0.0.jar` at the repository root carrying exactly one
 `plugin.yml` and one `config.yml`.
 
-**Does not exist yet:** the seven `platforms/mods/` modules and `PROMPT.md`.
+**Does not exist yet:** `PROMPT.md`.
+
+**Built but not verified:** the four Forge and NeoForge modules. Both use ModDevGradle,
+which resolves `net.neoforged:minecraft-dependencies` from `maven.neoforged.net/mojang-meta`,
+and that host returned 502 for every version throughout the session. Fabric, which uses
+Loom and never touches it, builds and produces both jars.
 
 ## Stack
 
@@ -37,5 +42,6 @@ publishes no obfuscation mappings and therefore supports no mod toolchain at all
 
 ## Next step
 
-Task 7 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
-the mod platform modules. The tasks are stacked branches and run strictly in order.
+Task 8 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
+simplifying the identity properties and renaming the namespace. The tasks are stacked
+branches and run strictly in order.

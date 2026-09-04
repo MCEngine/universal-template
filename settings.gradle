@@ -1,6 +1,14 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'NeoForged'
+            url = 'https://maven.neoforged.net/releases'
+        }
     }
 
     // Plugin versions are declared once here, read from gradle.properties, so a
@@ -10,6 +18,9 @@ pluginManagement {
     plugins {
         id 'org.gradle.toolchains.foojay-resolver-convention' version providers.gradleProperty('foojay-resolver-version').get()
         id 'com.gradleup.shadow' version providers.gradleProperty('shadow-version').get()
+        id 'fabric-loom' version providers.gradleProperty('loom-version').get()
+        id 'net.neoforged.moddev' version providers.gradleProperty('moddevgradle-version').get()
+        id 'net.neoforged.moddev.legacyforge' version providers.gradleProperty('moddevgradle-version').get()
     }
 }
 
@@ -36,3 +47,25 @@ include 'platforms:bukkit:spigotmc'
 include 'platforms:bukkit:papermc'
 include 'platforms:bukkit:foliamc'
 include 'platforms:bukkit:engine'
+
+// Loader-agnostic mod code. Always included: it depends on no Minecraft and no
+// loader, so it builds with the plain java plugin and keeps the wire format
+// compiling even when the loader modules below are switched off.
+include 'platforms:mods:core'
+
+// The six loader modules are opt-in. Their toolchains download and decompile
+// Minecraft on first run, which costs minutes and gigabytes, so a change
+// confined to the Bukkit side should not have to pay for it.
+//
+//   ./gradlew -Pmods=true build
+//
+// Set mods=true in gradle.properties to make it permanent.
+def modsEnabled = providers.gradleProperty('mods').map { it.toBoolean() }.getOrElse(false)
+if (modsEnabled) {
+    include 'platforms:mods:forge:client'
+    include 'platforms:mods:forge:server'
+    include 'platforms:mods:fabric:client'
+    include 'platforms:mods:fabric:server'
+    include 'platforms:mods:neoforge:client'
+    include 'platforms:mods:neoforge:server'
+}

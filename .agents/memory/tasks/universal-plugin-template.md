@@ -252,3 +252,40 @@ carries exactly one `plugin.yml` and one `config.yml`, now with `api-version: '1
 
 Next task depends on: the loader coordinates in `gradle.properties`, which the six mod
 modules read.
+
+### Task 7 — feat/mod-platforms
+
+Added the mod side: `platforms/mods/core` plus the six loader modules under
+`platforms/mods/{forge,fabric,neoforge}/{client,server}`.
+
+`mods/core` holds `TemplateChannel` (two channel ids, request and response) and
+`TemplatePayloadCodec` (the byte layout), depending on nothing but `api` and the JDK, so it
+stays in the default build and the wire format keeps compiling even with the loaders off.
+The action is encoded by name rather than ordinal, so reordering the enum cannot silently
+change the meaning of packets already in flight.
+
+The client half of every loader decides nothing: it sends an action and renders the answer,
+and the server takes the player's identity from the connection rather than from the payload.
+That is a trust boundary, not just a packaging choice.
+
+**Verified:** `./gradlew build` green with 26 tests and zero deprecations;
+`./gradlew -Pmods=true :platforms:mods:fabric:client:build :platforms:mods:fabric:server:build`
+produces `TemplateFabricClient-0.0.0.jar` and `TemplateFabricServer-0.0.0.jar` in the root
+`build/libs/`, each carrying the bundled `api` and `mods/core` classes and a fully expanded
+`fabric.mod.json`.
+
+**Not verified: the four Forge and NeoForge modules.** Both loaders build through
+ModDevGradle, which resolves `net.neoforged:minecraft-dependencies` from
+`maven.neoforged.net/mojang-meta`. That host returned **502 Bad Gateway for every version
+tried**, including ones unrelated to this project, for the whole session; the `releases`
+repository on the same host answers normally, and the agent proxy reported no relay
+failures, so this is an upstream outage rather than a configuration fault. Their code and
+build wiring are written and committed, but no compiler has seen them. **Treat them as
+unverified until `./gradlew -Pmods=true build` has been run against a working
+`mojang-meta`.**
+
+Two build details worth keeping: a `from(configurations.bundled...)` in a `jar` task needs an
+explicit `dependsOn configurations.bundled`, or Gradle fails with an implicit-dependency
+error; and only the server halves bundle `common`, because only they use `TemplateProvider`.
+
+Next task depends on: nothing. Task 8 renames the namespace across everything added here.

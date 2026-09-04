@@ -14,7 +14,7 @@ pluginManagement {
 }
 
 plugins {
-    // Lets Gradle download the Java 25 toolchain rather than requiring it to be
+    // Lets Gradle download the Java 21 toolchain rather than requiring it to be
     // installed already.
     id 'org.gradle.toolchains.foojay-resolver-convention'
 }

@@ -6,12 +6,14 @@
 
 | | |
 |---|---|
-| **JDK** | 25. Minecraft 26.1.2 requires it, so every module targets it. |
+| **JDK** | 21. Minecraft 1.21.11 requires it, so every module targets it. |
 | **Gradle** | None needed — use the committed wrapper (`./gradlew`), which pins Gradle 9.5.0. |
 | **Disk** | A few hundred MB for the Bukkit side. Several GB more if you enable the mod modules, which decompile Minecraft. |
 
-You do not have to install JDK 25 yourself. `settings.gradle` applies the Foojay resolver,
-so Gradle downloads a matching toolchain on first build if one is not already present.
+You do not have to install JDK 21 yourself. `settings.gradle` applies the Foojay resolver,
+so Gradle downloads a matching toolchain on first build if one is not already present, and
+`gradle/gradle-daemon-jvm.properties` pins the Gradle daemon itself to 21 — which the mod
+toolchains require, since Loom checks the daemon's Java version rather than the toolchain's.
 
 ## Build
 
@@ -50,3 +52,21 @@ the universal engine jar — stay in their own module's `build/libs/`.
 Everything a fork renames lives in `gradle.properties`: `orgname`, `reponame`, and
 `pluginid`, plus the Minecraft and loader versions to target. See `PROMPT.md` at the
 repository root for the full checklist.
+
+## Retargeting the Minecraft version
+
+The template targets **1.21.11**, and not every version is a valid target. Mojang stopped
+publishing obfuscation mappings with the 26.x line, and Yarn has no 26.x builds, so Fabric
+Loom and ModDevGradle cannot set up for those versions at all — the Bukkit side would build
+and the mods would not.
+
+Before changing `minecraft-version`, confirm the version publishes mappings:
+
+```bash
+# the version's JSON must list client_mappings under "downloads"
+curl -s https://piston-meta.mojang.com/mc/game/version_manifest_v2.json   | python3 -c "import sys,json;print([v['url'] for v in json.load(sys.stdin)['versions'] if v['id']=='1.21.11'][0])"
+```
+
+Then update the five platform coordinates and the loader versions alongside it, set
+`java-version` to whatever that release's `javaVersion` says, and regenerate the daemon pin
+with `./gradlew updateDaemonJvm --jvm-version=<that version>`.

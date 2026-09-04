@@ -20,7 +20,7 @@ segments cannot contain hyphens, so `universal-template` could not be used verba
 | `reponame` | `universaltemplate` | Namespace is `io.github.mcengine.universaltemplate`. |
 | `pluginid` | `Template` | Class and jar base names: `TemplateSpigotMC`, `TemplateEngine-{version}.jar`. |
 | `project-version` | `0.0.0` | First log directory is `wiki/logs/0/0/0/`. |
-| Minecraft target | `26.1.2` | Matches the reference repository `MCOriax/mcidentity`. |
+| Minecraft target | `1.21.11` | Superseded the original `26.1.2`; see [`minecraft-target-version.md`](minecraft-target-version.md). |
 
 The hyphen is dropped rather than replaced, so one value serves as both the property and the
 package segment and there is no derivation step to keep in sync. The literal Git names are

@@ -22,9 +22,10 @@ there once, and this page links rather than repeats them.
 | `wiki/` | Human documentation, plus `wiki/logs/` for release history. |
 | `README.md`, `LICENSE` | Overview and the MIT license. |
 | `settings.gradle` | Project name and the module includes. Modules are added by the task that creates them. |
-| `build.gradle` | Root build: derived group, the Java 25 toolchain applied to every module, and the root `clean`. |
+| `build.gradle` | Root build: derived group, the Java 21 toolchain applied to every module, and the root `clean`. |
 | `gradle.properties` | Every renameable identifier and every dependency version. The one file a fork edits. |
 | `gradlew`, `gradlew.bat`, `gradle/wrapper/` | The committed wrapper, pinning Gradle 9.5.0. |
+| `gradle/gradle-daemon-jvm.properties` | Pins the Gradle **daemon** to Java 21, with per-OS download URLs. Generated, not hand-edited. |
 | `api/` | The shared contract. Interfaces, records, enums, one abstract dispatcher. No dependencies. |
 | `common/` | The implementation, plus `TemplateProvider` at the namespace root — the only supported way in. |
 | `platforms/bukkit/core/` | `AbstractTemplatePlugin`, the scheduler abstraction, the command, the listener, and the one `config.yml`. |
@@ -88,4 +89,15 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
   deprecated and is removed in Gradle 10. The build is checked with `--warning-mode all`.
 * **Plugin versions live in `pluginManagement` in `settings.gradle`**, read from
   `gradle.properties`. A module writes `id 'com.gradleup.shadow'` with no version, because
-  a `plugins {}` block accepts only constant expressions.
+  a `plugins {}` block accepts only constant expressions. The `version` keyword and its
+  argument must stay on one line, or Groovy parses `version` as a property read.
+* **The Minecraft target cannot move to a 26.x release.** Mojang stopped publishing
+  obfuscation mappings with that line, and Yarn has no 26.x builds, so Loom and
+  ModDevGradle cannot set up at all. 1.21.11 is the newest release that has mappings.
+  Before retargeting, check `downloads.client_mappings` exists in the version's JSON from
+  `piston-meta.mojang.com`.
+* **Loom needs the Gradle *daemon* JVM to match Minecraft's Java version**, not just the
+  toolchain. That is what `gradle/gradle-daemon-jvm.properties` is for. Regenerate it with
+  `./gradlew updateDaemonJvm --jvm-version=<n>` rather than editing it.
+* **Gradle 9 refuses to configure an included project whose directory does not exist**, so
+  an `include` line and the directory it names land in the same commit.

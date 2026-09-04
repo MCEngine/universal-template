@@ -21,11 +21,16 @@ there once, and this page links rather than repeats them.
 | `.agents/memory/` | Task record, decisions, current state. |
 | `wiki/` | Human documentation, plus `wiki/logs/` for release history. |
 | `README.md`, `LICENSE` | Overview and the MIT license. |
+| `settings.gradle` | Project name and the module includes. Modules are added by the task that creates them. |
+| `build.gradle` | Root build: derived group, the Java 25 toolchain applied to every module, and the root `clean`. |
+| `gradle.properties` | Every renameable identifier and every dependency version. The one file a fork edits. |
+| `gradlew`, `gradlew.bat`, `gradle/wrapper/` | The committed wrapper, pinning Gradle 9.5.0. |
 
 ## What does not exist yet
 
-No Gradle build, no source modules, no jars. The intended layout, the identity values and
-the ordered task list are all recorded in
+No source modules and no jars. The build skeleton is in place but `settings.gradle` includes
+nothing yet, so `./gradlew build` has no `build` task to run. The intended layout, the
+identity values and the ordered task list are all recorded in
 [`../../memory/tasks/universal-plugin-template.md`](../../memory/tasks/universal-plugin-template.md).
 **Do not infer the build from this page** — it is updated by each task as that task makes
 something true, so anything absent here is genuinely absent from the repository.
@@ -53,3 +58,11 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
   is an override and belongs in the root index's override table, never in the table itself.
 * **Memory is ungated, instructions are not.** Write `.agents/memory/` freely. Never create
   or edit an instruction file without the user selecting it first.
+* **`settings.gradle` tracks the directories that exist.** Each task adds its own `include`
+  lines, so every commit has a settings file matching what is on disk. If you add a module,
+  add its include in the same commit.
+* **The group is derived, never stored.** `build.gradle` builds it from the `orgname`
+  property. Do not add a `project-group` property alongside it — that is two sources for one
+  fact.
+* **Configuration cache is on.** A task that closes over `project` at execution time will
+  fail. Capture what you need at configuration time, as the root `clean` does.

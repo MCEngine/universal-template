@@ -105,3 +105,27 @@ trigger rows yet, and says so where the rows would go.
 
 Next task depends on: nothing. The repository map and `repository.md` both state plainly that
 no build exists yet, so task 3 updates them as it makes that false.
+
+### Task 3 — build/gradle-foundation
+
+Added the Gradle skeleton: `gradle.properties`, the root `build.gradle`, `settings.gradle`,
+`.gitattributes`, and the committed wrapper pinning Gradle 9.5.0. Extended `.gitignore` with
+IDE, OS, Java and mod-toolchain entries. Added `wiki/environments/setup.md` and its index row.
+
+**Plan correction, made before anything was written.** The plan split the toolchain: Java 25
+for the shared and Bukkit modules, Java 21 for the mods. Mojang's version manifest gives
+Minecraft 26.1.2 a `javaVersion` of 25, so the split was unnecessary and would have broken
+`platforms/mods/core` the moment it depended on `api`. One Java 25 toolchain now covers every
+module and the `mod-java-version` property was never created.
+
+`settings.gradle` deliberately includes no modules yet: each task adds its own `include`
+lines so every commit in the history has a settings file matching the directories on disk.
+
+Verified: `./gradlew --version` reports Gradle 9.5.0; `./gradlew properties` resolves
+`group: io.github.mcengine` and `version: 0.0.0`, confirming the group is derived from
+`orgname` rather than stored; `./gradlew clean` succeeds and the configuration cache stores
+an entry. `./gradlew build` has no `build` task to run yet — the root applies no Java plugin
+and there are no subprojects — which is expected until task 4.
+
+Next task depends on: the identity properties in `gradle.properties`, which task 4 reads to
+place its packages.

@@ -1,0 +1,11 @@
+plugins {
+    // Lets Gradle download the Java 25 toolchain rather than requiring it to be
+    // installed already.
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'universal-template'
+
+// Modules are added by the task that creates them, so every branch in the
+// history has a settings file that matches the directories on disk. The mod
+// modules are the exception -- see the opt-in block at the bottom.

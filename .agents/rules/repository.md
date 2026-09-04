@@ -32,13 +32,29 @@ memory.
   the index that owns the changed scope in the same commit. See
   `{shared}/creators/index-creator.md` and `{shared}/rules/change-propagation.md`.
 
+## Build and test commands
+
+| Command | Purpose |
+|---|---|
+| `./gradlew build` | Compile every module and run the test suite. |
+| `./gradlew -Pmods=true build` | The same, including the six mod modules. |
+| `./gradlew clean` | Remove build output, including the root `build/` directory. |
+
+The Gradle wrapper is committed; never invoke a system-installed `gradle`. Full setup notes
+are in [`../../wiki/environments/setup.md`](../../wiki/environments/setup.md).
+
+**What "verify" means here.** The shared task workflow says to finish and verify each task
+before starting the next. In this repository that means the Gradle build and the tests pass
+for the modules you touched — `./gradlew build`, plus `-Pmods=true` when the change reaches
+`platforms/mods/`.
+
 ## Current state
 
-The instruction, knowledge and memory systems exist. The Gradle build and the source
-modules do not yet — they are the remaining tasks in
-[`../memory/tasks/universal-plugin-template.md`](../memory/tasks/universal-plugin-template.md),
-which also records the identity values and layout already agreed. This section, and the
-repository map, are updated by each task that changes what is true.
+The instruction, knowledge and memory systems exist, and so does the Gradle skeleton:
+`settings.gradle`, the root `build.gradle`, `gradle.properties`, and the committed wrapper.
+The source modules do not yet — they are the remaining tasks in
+[`../memory/tasks/universal-plugin-template.md`](../memory/tasks/universal-plugin-template.md).
+This section, and the repository map, are updated by each task that changes what is true.
 
 ## Version carriers in this repository
 
@@ -47,5 +63,7 @@ repository map, are updated by each task that changes what is true.
 | Carrier | Where |
 |---|---|
 | `project-version` | `gradle.properties` |
+| Gradle wrapper version | `gradle/wrapper/gradle-wrapper.properties` |
+| Minecraft, loader and plugin dependency versions | `gradle.properties` |
 | Log directories | `wiki/logs/{Major}/{Minor}/{Patch}/` |
 | Git tags and release drafts | GitHub releases |

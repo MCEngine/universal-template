@@ -55,25 +55,31 @@ in full under `.agents/memory/decisions/`.
 
 | # | Title | Scope | Repository | Branch | Files / areas | PR |
 |---|---|---|---|---|---|---|
-| 1 | Task record | This file and the index rows it needs | `MCEngine/universal-template` | `chore/universal-plugin-template-plan` | `.agents/memory/tasks/`, `.agents/index/` | |
-| 2 | Agent instruction system | Mode B consumer setup | `MCEngine/universal-template` | `docs/agents-setup` | `AGENTS.md`, `.agents/`, `wiki/`, `.claude/`, `README.md` | |
-| 3 | Gradle foundation | Build skeleton, no source yet | `MCEngine/universal-template` | `build/gradle-foundation` | `settings.gradle`, `build.gradle`, `gradle.properties`, `gradle/`, `.gitignore`, `.gitattributes` | |
-| 4 | Shared modules | `api/` and `common/` | `MCEngine/universal-template` | `feat/shared-modules` | `api/`, `common/` | |
-| 5 | Bukkit platforms | core, three platforms, engine | `MCEngine/universal-template` | `feat/bukkit-platforms` | `platforms/bukkit/` | |
-| 6 | Minecraft target | Retarget the whole template to 1.21.11 | `MCEngine/universal-template` | `build/minecraft-target` | `gradle.properties`, `gradle/`, `build.gradle`, docs | |
-| 7 | Mod platforms | core and six loader modules | `MCEngine/universal-template` | `feat/mod-platforms` | `platforms/mods/`, `settings.gradle` | |
-| 8 | Fork guide | `PROMPT.md`, wired into `AGENTS.md` | `MCEngine/universal-template` | `docs/template-prompt` | `PROMPT.md`, `AGENTS.md` | |
-| 9 | Release 0.0.0 | Changelog, index rows, close this record | `MCEngine/universal-template` | `chore/release-0-0-0` | `wiki/logs/0/0/0/`, `.agents/index/logs-index.md`, this file | |
+| 1 | Task record | This file and the index rows it needs | `MCEngine/universal-template` | `chore/universal-plugin-template-plan` | `.agents/memory/tasks/`, `.agents/index/` | #1 |
+| 2 | Agent instruction system | Mode B consumer setup | `MCEngine/universal-template` | `docs/agents-setup` | `AGENTS.md`, `.agents/`, `wiki/`, `.claude/`, `README.md` | #2 |
+| 3 | Gradle foundation | Build skeleton, no source yet | `MCEngine/universal-template` | `build/gradle-foundation` | `settings.gradle`, `build.gradle`, `gradle.properties`, `gradle/`, `.gitignore`, `.gitattributes` | #3 |
+| 4 | Shared modules | `api/` and `common/` | `MCEngine/universal-template` | `feat/shared-modules` | `api/`, `common/` | #4 |
+| 5 | Bukkit platforms | core, three platforms, engine | `MCEngine/universal-template` | `feat/bukkit-platforms` | `platforms/bukkit/` | #5 |
+| 6 | Minecraft target | Retarget the whole template to 1.21.11 | `MCEngine/universal-template` | `build/minecraft-target` | `gradle.properties`, `gradle/`, `build.gradle`, docs | #6 |
+| 7 | Mod platforms | core and six loader modules | `MCEngine/universal-template` | `feat/mod-platforms` | `platforms/mods/`, `settings.gradle` | #7 |
+| 8 | Identity properties | Simplify the properties, rename the namespace | `MCEngine/universal-template` | `refactor/identity-properties` | `gradle.properties`, `build.gradle`, every package directory | #8 |
+| 9 | Fork guide | `PROMPT.md`, wired into `AGENTS.md` | `MCEngine/universal-template` | `docs/template-prompt` | `PROMPT.md`, `AGENTS.md`, descriptors | #9 |
+| 10 | Loader verification | Fix NeoForge; gate Forge behind its own flag | `MCEngine/universal-template` | `fix/mod-loader-verification` | `platforms/mods/`, `settings.gradle`, docs | #10 |
+| 11 | Dated logs | Date the change log instead of versioning it | `MCEngine/universal-template` | `docs/date-based-logs` | `wiki/logs/`, `.agents/index/logs-index.md`, `AGENTS.md`, `PROMPT.md` | #11 |
+| 12 | Close out | Fill this table, mark the record done | `MCEngine/universal-template` | `chore/template-close-out` | this file, `.agents/memory/state/` | #12 |
 
-**Renumbered at task 6.** The list above originally had eight tasks, with the mod platforms
-at 6. Building them uncovered a blocker that forced a change of Minecraft version across the
-whole template — a different concern touching different files from the mod modules, so it
-became its own task and everything after it shifted by one. The workflow's rule that a task
-invalidating a later one stops and revises the plan is what this entry records; the user
-approved the revision before any of it was written.
+**The list grew from eight tasks to twelve, twice, and both times for a reason worth
+keeping.** At task 6 the mod work uncovered that Minecraft 26.x publishes no obfuscation
+mappings, forcing a retarget of the whole template — a different concern from the mod
+modules, so it became its own task. Later the user changed where the template's identity
+lives, added the interactive `PROMPT.md`, and asked for dated logs; and the NeoForged outage
+clearing mid-session made a verification task possible that had not been planned. Each time
+the plan was revised and put to the user before anything was written, per the workflow's
+rule that a task invalidating a later one stops rather than silently reworking the list.
 
-Task 1 branches from `master`; task `k` branches from task `k-1`. The `PR` column is filled
-by task 8, per `{shared}/planning/task-workflow.md` §F.
+Task 1 branches from `master`; task `k` branches from task `k-1`. The `PR` column was filled
+by task 12, per `{shared}/planning/task-workflow.md` §F — last in the stack, so writing the
+numbers there rebased nothing.
 
 Task 7 sits second-to-last on purpose: `PROMPT.md` can only list what a fork must rename
 once the files exist, so the `AGENTS.md` trigger row pointing at it lands in the same commit
@@ -427,3 +433,22 @@ deprecations; no `INDEX.md` anywhere; no index outside `.agents/index/`; every `
 file carries valid frontmatter; every relative link in every markdown file resolves.
 
 Next task depends on: nothing. The close-out fills the pull request column.
+
+### Task 12 — chore/template-close-out
+
+Rewrote the task table to the twelve tasks the work actually took, recorded why it grew from
+eight, filled the pull request column, and closed the record.
+
+**Final state.** `./gradlew build` and `./gradlew -Pmods=true build` are both green: 26 tests
+across six test classes, zero deprecation warnings under `--warning-mode all`, and five jars
+in the repository root's `build/libs/` — `TemplateEngine-0.0.0.jar` plus the Fabric and
+NeoForge client and server jars. The instruction system passes every structural check: no
+`INDEX.md`, no index outside `.agents/index/`, valid frontmatter throughout, every relative
+link resolving, and the `AGENTS.md` trigger table matching the shared set row for row.
+
+**What is not done, and why.** The two Forge modules are written but do not build; the cause
+is in NeoFormRuntime rather than in this repository, the diagnosis and next steps are in
+`wiki/environments/setup.md`, and they sit behind `-Pforge=true` so nothing else is affected.
+No CI and no `maven-publish`; both were unrequested scope and are raised as findings instead.
+
+**Status: done.**

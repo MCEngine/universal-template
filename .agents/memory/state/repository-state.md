@@ -52,6 +52,13 @@ publishes no obfuscation mappings and therefore supports no mod toolchain at all
 
 ## Next step
 
-Task 8 of [`../tasks/universal-plugin-template.md`](../tasks/universal-plugin-template.md):
-simplifying the identity properties and renaming the namespace. The tasks are stacked
-branches and run strictly in order.
+Nothing outstanding. The template is complete and green apart from the two Forge modules,
+which are documented above and behind their own flag.
+
+The obvious follow-ups, none of them started:
+
+* Make Forge build, or drop it (see `wiki/environments/setup.md`).
+* Add CI. There is no `.github/workflows/`; the reference repository has none either, and it
+  was not asked for.
+* Publish `api` and `common` to GitHub Packages. The reference repository does; this one has
+  no `maven-publish` configuration, which was left out as unrequested scope.

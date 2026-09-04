@@ -69,14 +69,21 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
 * **`settings.gradle` tracks the directories that exist.** Each task adds its own `include`
   lines, so every commit has a settings file matching what is on disk. If you add a module,
   add its include in the same commit.
-* **The group is derived, never stored.** `build.gradle` builds it from the `orgname`
-  property. Do not add a `project-group` property alongside it — that is two sources for one
-  fact.
+* **The group is derived, never stored.** `build.gradle` builds it from `git-org-name`,
+  lowercased. Do not add a `project-group` property alongside it — that is two sources for
+  one fact.
+* **`namespaceSegment` and `pluginIdValue` live at the top of the root `build.gradle`,
+  not in `gradle.properties`.** They name the project in Java source as well as in the
+  build, and a rename that has to touch package directories and class names cannot be driven
+  from a properties file. Keeping them in one place means the Java tree and the build cannot
+  disagree. `PROMPT.md` rewrites them.
+* **The version is 0.0.0 permanently.** This is a template; there is nothing here to
+  release. A fork sets its own starting version through `PROMPT.md`.
 * **Configuration cache is on.** A task that closes over `project` at execution time will
   fail. Capture what you need at configuration time, as the root `clean` does.
 * **`api` takes no dependencies, ever.** The moment it depends on Bukkit or a mod loader it
   stops being the thing all four platforms can share.
-* **Platform modules never import `...universaltemplate.common`.** They go through
+* **Platform modules never import `...universal.common`.** They go through
   `TemplateProvider`. If the facade does not expose what you need, add a method to it.
 * **`AbstractTemplateService.handle` has no `default` branch on purpose.** Adding a
   `TemplateAction` constant is meant to break the build until every platform handles it.

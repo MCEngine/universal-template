@@ -25,6 +25,12 @@ tests, zero deprecation warnings under `--warning-mode all`, and
 
 **Does not exist yet:** `PROMPT.md`.
 
+**Identity:** `gradle.properties` carries `git-org-name` and `git-repository-name` only; the
+group `io.github.mcengine` is derived from the first. The package segment (`universal`) and
+the plugin id (`Template`) live at the top of the root `build.gradle`, because they also
+appear in Java source. The namespace is `io.github.mcengine.universal`. The version is
+fixed at `0.0.0` permanently.
+
 **Built but not verified:** the four Forge and NeoForge modules. Both use ModDevGradle,
 which resolves `net.neoforged:minecraft-dependencies` from `maven.neoforged.net/mojang-meta`,
 and that host returned 502 for every version throughout the session. Fabric, which uses

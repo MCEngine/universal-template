@@ -1,21 +1,25 @@
-def orgName = providers.gradleProperty('orgname').get()
-def repoName = providers.gradleProperty('reponame').get()
-def pluginIdValue = providers.gradleProperty('pluginid').get()
+def gitOrgName = providers.gradleProperty('git-org-name').get()
 def projectVersion = providers.gradleProperty('project-version').get()
 def javaVersion = providers.gradleProperty('java-version').get() as Integer
 
+// The one identifier a fork changes that the build cannot derive. PROMPT.md
+// rewrites it here, in the same pass that renames the package directories and
+// the Template* class names -- one rename, one place, so the Java tree and the
+// build can never disagree about what this project is called.
+def namespaceSegment = 'universal'
+def pluginIdValue = 'Template'
+
 allprojects {
-    // The group is derived rather than stored, so the namespace has exactly one
-    // source: the orgname property. See PROMPT.md.
-    group = "io.github.${orgName}"
+    // Derived from the GitHub owner rather than stored separately, so the group
+    // has exactly one source.
+    group = "io.github.${gitOrgName.toLowerCase()}"
     version = projectVersion
 
     ext {
-        // Every module that names a package or a jar reads these rather than
-        // hardcoding the values, so renaming a fork stays a gradle.properties
-        // edit.
+        // Every module that names a package, a jar, or a command reads these
+        // rather than spelling the values out again.
         pluginId = pluginIdValue
-        namespace = "io.github.${orgName}.${repoName}"
+        namespace = "io.github.${gitOrgName.toLowerCase()}.${namespaceSegment}"
         commandName = pluginIdValue.toLowerCase()
     }
 

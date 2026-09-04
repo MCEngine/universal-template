@@ -12,8 +12,8 @@ Bukkit server plugin and standalone mods, over a single shared contract.
   talk over a plugin message channel.
 - A shared `api/` contract and a single `common/` facade class, so a developer integrating
   against this plugin reads one file.
-- Renaming is driven from `gradle.properties` — organization, repository, and plugin id —
-  not scattered across the tree.
+- Renaming is one guided pass: `PROMPT.md` asks what your project is, rewrites the build,
+  the sources and the docs, and then deletes itself.
 
 ## Quick start
 

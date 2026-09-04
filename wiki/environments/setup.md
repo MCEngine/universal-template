@@ -49,9 +49,13 @@ the universal engine jar — stay in their own module's `build/libs/`.
 
 ## Configuration
 
-Everything a fork renames lives in `gradle.properties`: `orgname`, `reponame`, and
-`pluginid`, plus the Minecraft and loader versions to target. See `PROMPT.md` at the
-repository root for the full checklist.
+`gradle.properties` carries the GitHub coordinates (`git-org-name`, `git-repository-name`),
+the version, and every Minecraft and loader version to target. The two names that appear in
+code — the package segment and the plugin id — are at the top of the root `build.gradle`.
+
+Do not edit these by hand for a fork. Run `PROMPT.md` at the repository root: it asks what
+the project should be called, rewrites all of it including the package directories and class
+names, and then deletes itself.
 
 ## Retargeting the Minecraft version
 

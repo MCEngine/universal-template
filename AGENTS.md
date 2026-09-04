@@ -11,7 +11,8 @@ Bukkit server plugin (`platforms/bukkit/`, covering SpigotMC, PaperMC and FoliaM
 single universal engine jar) and standalone mods (`platforms/mods/`, covering Forge, Fabric
 and NeoForge, each split into a client and a server jar) — over a shared `api/` contract and
 a `common/` implementation. Forks rename it and build on it; it is not a plugin in its own
-right.
+right — **start by running [`PROMPT.md`](PROMPT.md)**, which asks what the project should be
+and rewrites the repository to match.
 
 ## Shared Instruction Set
 
@@ -108,10 +109,18 @@ truth, with this repository's own rows appended below.
 
 ### This repository's own rows
 
-None yet. This repository currently carries the mandatory core set only — its rules hub,
-its repository map, its indexes, and its memory. Local instruction files are added under
-`.agents/{folder}/{file}.md` through the discovery protocol below, and each one gets a row
-here in the same commit that creates it.
+| When you are about to… | Load and obey |
+|---|---|
+| Set this fork up for the first time, or rename it | [`PROMPT.md`](PROMPT.md) |
+
+[`PROMPT.md`](PROMPT.md) is the one-time setup procedure: it asks what the project should be
+called and what it does, rewrites the build, the Java tree and the documentation, and then
+deletes itself along with this row. **If `PROMPT.md` is absent, setup has already happened**
+— this row goes with it.
+
+Beyond that this repository carries the mandatory core set only. Local instruction files are
+added under `.agents/{folder}/{file}.md` through the discovery protocol below, and each one
+gets a row here in the same commit that creates it.
 
 ## Reading order (mandatory)
 

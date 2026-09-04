@@ -23,7 +23,7 @@ tests, zero deprecation warnings under `--warning-mode all`, and
 `build/libs/TemplateEngine-0.0.0.jar` at the repository root carrying exactly one
 `plugin.yml` and one `config.yml`.
 
-**Does not exist yet:** `PROMPT.md`.
+**`PROMPT.md`** exists at the root and is the fork setup procedure; it deletes itself once run.
 
 **Identity:** `gradle.properties` carries `git-org-name` and `git-repository-name` only; the
 group `io.github.mcengine` is derived from the first. The package segment (`universal`) and

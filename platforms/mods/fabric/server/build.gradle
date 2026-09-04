@@ -56,6 +56,7 @@ processResources {
         modName    : "${pluginId} Server",
         entrypoint : "${namespace}.mod.fabric.server.${pluginId}FabricServer",
         minecraft  : providers.gradleProperty('minecraft-version').get(),
+        author     : author,
         loader     : providers.gradleProperty('fabric-loader-version').get()
     ]
     inputs.properties props

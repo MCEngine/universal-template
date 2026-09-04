@@ -15,6 +15,7 @@ there once, and this page links rather than repeats them.
 |---|---|
 | `AGENTS.md` | Entry point: shared set resolution, reading order, trigger table. |
 | `.claude/CLAUDE.md` | A single import of `../AGENTS.md`, so Claude Code and every other agent read the same instructions. Never paste content into it. |
+| `PROMPT.md` | The one-time fork setup procedure. Deletes itself when it has run. |
 | `.agents/index/` | Every index. Six files, flat, named `{scope}-index.md`. |
 | `.agents/rules/repository.md` | This repository's own rules hub. |
 | `.agents/wiki/context/` | This page. |
@@ -34,10 +35,13 @@ there once, and this page links rather than repeats them.
 | `platforms/mods/core/` | `TemplateChannel` and `TemplatePayloadCodec`. No Minecraft dependency, always in the build. |
 | `platforms/mods/{forge,fabric,neoforge}/{client,server}/` | Six loader modules, built only under `-Pmods=true`. |
 
-## What does not exist yet
+## What is deliberately absent
 
-`PROMPT.md`. `./gradlew build` builds the shared modules, the whole Bukkit side, and
-`platforms/mods/core`. The intended layout, the identity values and the
+Nothing is outstanding. `./gradlew build` builds the shared modules, the whole Bukkit side
+and `platforms/mods/core`; `./gradlew -Pmods=true build` adds the six loader modules.
+
+`PROMPT.md` exists here and **is meant to disappear in a fork** — it deletes itself once
+setup has run, together with its row in the `AGENTS.md` trigger table. The intended layout, the identity values and the
 ordered task list are all recorded in
 [`../../memory/tasks/universal-plugin-template.md`](../../memory/tasks/universal-plugin-template.md).
 **Do not infer the build from this page** — it is updated by each task as that task makes

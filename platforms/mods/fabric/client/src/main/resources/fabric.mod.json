@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "${modName}",
   "description": "Client half of the universal plugin template. Sends actions to the server over a plugin message channel.",
-  "authors": ["MCEngine"],
+  "authors": ["${author}"],
   "license": "MIT",
   "environment": "client",
   "entrypoints": {

@@ -43,6 +43,8 @@ processResources {
         version   : project.version,
         modId     : "${commandName}_client",
         modName   : "${pluginId} Client",
+        author    : author,
+        issues    : issueTrackerUrl,
         minecraft : providers.gradleProperty('minecraft-version').get()
     ]
     inputs.properties props

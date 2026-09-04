@@ -1,13 +1,13 @@
 modLoader = "javafml"
 loaderVersion = "[1,)"
 license = "MIT"
-issueTrackerURL = "https://github.com/MCEngine/universal-template/issues"
+issueTrackerURL = "${issues}"
 
 [[mods]]
 modId = "${modId}"
 version = "${version}"
 displayName = "${modName}"
-authors = "MCEngine"
+authors = "${author}"
 description = '''
 Server half of the universal plugin template.
 '''

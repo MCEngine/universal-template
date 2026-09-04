@@ -50,6 +50,7 @@ processResources {
         modName    : "${pluginId} Client",
         entrypoint : "${namespace}.mod.fabric.client.${pluginId}FabricClient",
         minecraft  : providers.gradleProperty('minecraft-version').get(),
+        author     : author,
         loader     : providers.gradleProperty('fabric-loader-version').get()
     ]
     inputs.properties props

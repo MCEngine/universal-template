@@ -3,7 +3,7 @@ version: ${version}
 main: ${main}
 api-version: '${apiVersion}'
 folia-supported: ${foliaSupported}
-author: MCEngine
+author: ${author}
 description: Universal plugin template
 commands:
   ${command}:

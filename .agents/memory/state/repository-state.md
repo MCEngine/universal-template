@@ -31,10 +31,14 @@ the plugin id (`Template`) live at the top of the root `build.gradle`, because t
 appear in Java source. The namespace is `io.github.mcengine.universal`. The version is
 fixed at `0.0.0` permanently.
 
-**Built but not verified:** the four Forge and NeoForge modules. Both use ModDevGradle,
-which resolves `net.neoforged:minecraft-dependencies` from `maven.neoforged.net/mojang-meta`,
-and that host returned 502 for every version throughout the session. Fabric, which uses
-Loom and never touches it, builds and produces both jars.
+**Verified:** the Bukkit side, `platforms/mods/core`, and the Fabric and NeoForge client and
+server modules. `./gradlew -Pmods=true build` is green and produces five jars in the root
+`build/libs/`.
+
+**Written but not building: the two Forge modules.** Behind `-Pforge=true`. NeoFormRuntime
+fetches `net.minecraftforge:forge:<version>:universal-srg` outside Gradle's dependency
+resolution, so declaring the Forge maven anywhere does not reach it. Not a build-script bug;
+do not add more repositories.
 
 ## Stack
 

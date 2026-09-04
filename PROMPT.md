@@ -158,8 +158,13 @@ bumped without the user asking.
 
 ```bash
 ./gradlew clean build --warning-mode all     # green, zero deprecations, all tests pass
-./gradlew -Pmods=true build                  # the six mod jars; slow on first run
+./gradlew -Pmods=true build                  # the Fabric and NeoForge jars; slow on first run
 ```
+
+The two Forge modules sit behind an extra `-Pforge=true` and do not currently build; see
+*Forge needs a second flag* in [`wiki/environments/setup.md`](wiki/environments/setup.md).
+If the fork does not target Forge, deleting `platforms/mods/forge/` is clean — nothing else
+depends on it.
 
 Then check:
 

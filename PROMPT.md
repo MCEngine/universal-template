@@ -131,9 +131,12 @@ ids, entry-point class names, author, issue tracker and versions are generated.
 * **`wiki/information/architecture.md`** — keep the structural explanation, which is still
   true, and replace the template-specific framing with theirs.
 * **`wiki/environments/setup.md`** — update names and commands.
-* **`wiki/logs/`** — delete `0/0/0/` and create `{Major}/{Minor}/{Patch}/CHANGELOG.md` for
-  their starting version, describing the project's initial state. Update
-  `.agents/index/logs-index.md` to match.
+* **`wiki/logs/`** — the template logs by date, `{yyyy}/{mm}/{dd}/`, because its version is
+  fixed. **A fork releases, so switch it back to versions.** Delete the dated directories and
+  create `{Major}/{Minor}/{Patch}/CHANGELOG.md` for their starting version, describing the
+  project's initial state. Rewrite `.agents/index/logs-index.md` to match — including its
+  note that creating a directory is ungated, which stops being true once the directory is a
+  version claim again.
 * **`AGENTS.md`** — rewrite the opening paragraph to describe their project. Leave the
   mirrored trigger table alone unless answer 7 asked for rows; a mirrored row is never
   repointed at a local file, and a local override is declared in the root index's override

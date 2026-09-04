@@ -396,3 +396,34 @@ Verified: `./gradlew -Pmods=true build` green; 26 tests; five jars in the root `
 — the engine plus the Fabric and NeoForge client and server jars.
 
 Next task depends on: nothing.
+
+### Task 11 — docs/date-based-logs
+
+Switched the change log from `wiki/logs/{Major}/{Minor}/{Patch}/` to
+`wiki/logs/{yyyy}/{mm}/{dd}/CHANGELOG.md`, at the user's suggestion, and rewrote the entry to
+cover the whole of this work rather than only the instruction-system scaffold.
+
+The reasoning is worth keeping: this repository's version is fixed at `0.0.0`, so a version
+directory encoded a claim it can never make, while a date encodes the only ordering a
+never-versioned repository has. The depth is unchanged at three segments, so the index keeps
+its shape.
+
+Two refinements on top of the suggestion:
+
+* `mm` and `dd` are **zero-padded**, so the directories sort correctly as strings. `2026/9/4`
+  would sort after `2026/12/1`.
+* **A date directory is not a version claim, so creating one is not gated.**
+  `{shared}/rules/versioning.md` gates version directories precisely because they assert a
+  release; a date asserts only when something happened. Recorded explicitly in
+  `logs-index.md` and the repository rules, because an agent that reads the shared rule and
+  stops to ask permission before writing a log entry has misread it.
+
+Also updated the version rule in `AGENTS.md`, the version-carrier table, the repository map,
+and `PROMPT.md` — where a fork is told to switch **back** to version directories, since a
+fork does release, and to drop the ungated note along with them.
+
+Verified: `./gradlew -Pmods=true clean build --warning-mode all` green with zero
+deprecations; no `INDEX.md` anywhere; no index outside `.agents/index/`; every `.agents/`
+file carries valid frontmatter; every relative link in every markdown file resolves.
+
+Next task depends on: nothing. The close-out fills the pull request column.

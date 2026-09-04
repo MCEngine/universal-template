@@ -56,6 +56,7 @@ something true, so anything absent here is genuinely absent from the repository.
 | Documentation a person reads | `wiki/{folder}/{file-name}.md` |
 | Procedure or framing only an agent needs | `.agents/wiki/{type}/{file-name}.md` |
 | Task state, a decision, current state | `.agents/memory/{type}/{file-name}.md` |
+| A record of what changed today | `wiki/logs/{yyyy}/{mm}/{dd}/CHANGELOG.md` — dated, not versioned, and ungated |
 | An index | `.agents/index/{scope}-index.md` |
 
 Never an `INDEX.md`. Never a third documentation tree. The authority is

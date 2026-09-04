@@ -200,10 +200,14 @@ verified. Memory under `.agents/memory/` is written freely and automatically —
 ## Version rule
 
 Never change the project version without explicit user approval — see
-`{shared}/rules/versioning.md`. In this repository that means `project-version` in
-`gradle.properties` and the `wiki/logs/{Major}/{Minor}/{Patch}/` directory, which is
-itself a version claim. The carriers are listed in
-[`.agents/rules/repository.md`](.agents/rules/repository.md).
+`{shared}/rules/versioning.md`. In this repository the answer is effectively always no:
+`project-version` in `gradle.properties` is fixed at `0.0.0`, because a template has nothing
+to release.
+
+For the same reason this repository's logs are **dated, not versioned** —
+`wiki/logs/{yyyy}/{mm}/{dd}/CHANGELOG.md`. A date directory is not a version claim, so
+creating one is not gated; record the day's work as you land it. The carriers and the full
+rule are in [`.agents/rules/repository.md`](.agents/rules/repository.md).
 
 ## No session links
 

@@ -4,7 +4,7 @@ import io.github.mcengine.universal.mod.core.TemplateChannel;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * The two custom payloads this mod puts on the wire.
@@ -38,7 +38,7 @@ public final class TemplatePayloads {
          * The channel this payload travels on.
          */
         public static final CustomPacketPayload.Type<Request> TYPE = new CustomPacketPayload.Type<>(
-            ResourceLocation.fromNamespaceAndPath(TemplateChannel.NAMESPACE, TemplateChannel.REQUEST_PATH));
+            Identifier.fromNamespaceAndPath(TemplateChannel.NAMESPACE, TemplateChannel.REQUEST_PATH));
 
         /**
          * Reads and writes the payload's bytes.
@@ -67,7 +67,7 @@ public final class TemplatePayloads {
          * The channel this payload travels on.
          */
         public static final CustomPacketPayload.Type<Response> TYPE = new CustomPacketPayload.Type<>(
-            ResourceLocation.fromNamespaceAndPath(TemplateChannel.NAMESPACE, TemplateChannel.RESPONSE_PATH));
+            Identifier.fromNamespaceAndPath(TemplateChannel.NAMESPACE, TemplateChannel.RESPONSE_PATH));
 
         /**
          * Reads and writes the payload's bytes.

@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -53,7 +53,7 @@ public class TemplateNeoForgeClient {
                 context.enqueueWork(() -> {
                     Minecraft client = Minecraft.getInstance();
                     if (client.player != null) {
-                        client.player.sendSystemMessage(Component.literal(response.message()));
+                        client.player.displayClientMessage(Component.literal(response.message()), false);
                     }
                 });
             });
@@ -75,7 +75,7 @@ public class TemplateNeoForgeClient {
             return;
         }
         TemplateRequest request = new TemplateRequest(client.player.getUUID(), action, payload);
-        PacketDistributor.sendToServer(
+        ClientPacketDistributor.sendToServer(
             new TemplatePayloads.Request(TemplatePayloadCodec.encodeRequest(request)));
     }
 }

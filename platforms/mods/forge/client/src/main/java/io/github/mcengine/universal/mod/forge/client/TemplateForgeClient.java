@@ -7,7 +7,7 @@ import io.github.mcengine.universal.mod.core.TemplateChannel;
 import io.github.mcengine.universal.mod.core.TemplatePayloadCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.ChannelBuilder;
@@ -28,7 +28,7 @@ public class TemplateForgeClient {
      * server refuse each other rather than misreading each other's bytes.
      */
     private static final PayloadChannel CHANNEL = ChannelBuilder
-        .named(ResourceLocation.fromNamespaceAndPath(TemplateChannel.NAMESPACE, TemplateChannel.REQUEST_PATH))
+        .named(Identifier.fromNamespaceAndPath(TemplateChannel.NAMESPACE, TemplateChannel.REQUEST_PATH))
         .optional()
         .networkProtocolVersion(1)
         .payloadChannel()

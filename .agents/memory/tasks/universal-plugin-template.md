@@ -359,3 +359,40 @@ literal remains in any `.yml`, `.json` or `.toml`. The root now holds `AGENTS.md
 shared directory rule, recorded in `.agents/memory/decisions/prompt-file-at-root.md`.
 
 Next task depends on: nothing. Task 10 closes the record.
+
+### Task 10 — fix/mod-loader-verification
+
+`maven.neoforged.net/mojang-meta` came back mid-session, so the Forge and NeoForge modules
+task 7 committed unverified could finally be compiled. They did not compile, and the fixes
+are worth recording because they are all Minecraft 1.21.11 API changes rather than mistakes
+in the build.
+
+**NeoForge: fixed and verified.** Three renames, found by reading the symbols out of the
+built Minecraft jar with `javap` rather than guessing:
+
+* `net.minecraft.resources.ResourceLocation` is now `net.minecraft.resources.Identifier` —
+  Mojang adopted the Yarn-style name. `fromNamespaceAndPath` is unchanged.
+* `Player.sendSystemMessage(Component)` is now `displayClientMessage(Component, boolean)`.
+* `PacketDistributor` no longer carries `sendToServer`; the client direction moved to
+  `net.neoforged.neoforge.client.network.ClientPacketDistributor`.
+
+Both NeoForge jars now build into the root `build/libs/`.
+
+**Forge: still not building, and it is not a build-script fault.** ModDevGradle's legacy
+Forge mode drives NeoFormRuntime, whose own `ArtifactManager` downloads
+`net.minecraftforge:forge:1.21.11-61.2.1:universal-srg` **outside Gradle's dependency
+resolution**. That artifact is published and returns HTTP 200, but declaring
+`maven.minecraftforge.net` in the module, in the root `allprojects` block, and clearing the
+NeoFormRuntime artifact cache all left the error unchanged. Adding more repositories is not
+the fix and should not be attempted again.
+
+Moved Forge behind its own `-Pforge=true` flag so `./gradlew -Pmods=true build` stays green
+rather than shipping a template whose own documented command fails. What to try next is
+written down in `wiki/environments/setup.md`: a newer ModDevGradle, ForgeGradle instead of
+its legacy mode, or deleting the two modules if the fork does not target Forge — nothing
+else depends on them.
+
+Verified: `./gradlew -Pmods=true build` green; 26 tests; five jars in the root `build/libs/`
+— the engine plus the Fabric and NeoForge client and server jars.
+
+Next task depends on: nothing.

@@ -30,13 +30,35 @@ with the same version.
 The Forge, Fabric, and NeoForge modules are excluded from the build unless you ask for them:
 
 ```bash
-./gradlew -Pmods=true build
+./gradlew -Pmods=true build          # Fabric and NeoForge, client and server
 ```
 
 They are opt-in because their toolchains download and decompile Minecraft the first time
 they run, which takes a long time and a lot of disk. A change confined to the Bukkit side
 does not need to pay that cost. Set `mods=true` in `gradle.properties` if you work on the
 mods often enough that passing the flag becomes noise.
+
+### Forge needs a second flag, and currently does not build
+
+```bash
+./gradlew -Pmods=true -Pforge=true build
+```
+
+The two Forge modules are written and complete, but their toolchain does not resolve. Legacy
+Forge support in ModDevGradle drives NeoFormRuntime, and NeoFormRuntime's own downloader
+fetches `net.minecraftforge:forge:<version>:universal-srg` **outside Gradle's dependency
+resolution**. Declaring `maven.minecraftforge.net` in the module, or in the root
+`allprojects` block, therefore never reaches it, and the download fails with
+`Could not find … universal-srg in any repository` even though that artifact is published
+and returns HTTP 200.
+
+They sit behind their own flag so that `-Pmods=true build` stays green rather than shipping
+a template whose documented command fails.
+
+If you need Forge, the things worth trying, in order: check whether a newer ModDevGradle
+release fixes the repository plumbing; try ForgeGradle instead of ModDevGradle's legacy
+mode; or drop the two modules if your project does not target Forge — nothing else depends
+on them.
 
 ## Where the jars go
 

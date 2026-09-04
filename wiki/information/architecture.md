@@ -180,3 +180,7 @@ and NeoForge under Mojang mappings via ModDevGradle. The wrapper is a few lines 
 under `-Pmods=true`, because Loom and ModDevGradle download and decompile Minecraft on first
 run. `platforms/mods/core` is always included: it needs no Minecraft, so the wire format
 keeps compiling even when the loaders are switched off.
+
+Forge sits behind a second flag, `-Pforge=true`, and does not currently build — see
+[Local Setup](../environments/setup.md) for the diagnosis. `-Pmods=true build` produces the
+Fabric and NeoForge jars and is green.

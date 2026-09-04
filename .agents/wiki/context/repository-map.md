@@ -33,7 +33,8 @@ there once, and this page links rather than repeats them.
 | `platforms/bukkit/{spigotmc,papermc,foliamc}/` | One entry point class each, plus a `plugin.yml`. |
 | `platforms/bukkit/engine/` | `TemplateEngine`: the universal jar, shaded, written to the root `build/libs/`. |
 | `platforms/mods/core/` | `TemplateChannel` and `TemplatePayloadCodec`. No Minecraft dependency, always in the build. |
-| `platforms/mods/{forge,fabric,neoforge}/{client,server}/` | Six loader modules, built only under `-Pmods=true`. |
+| `platforms/mods/{fabric,neoforge}/{client,server}/` | Four loader modules, built under `-Pmods=true`. Verified. |
+| `platforms/mods/forge/{client,server}/` | Written, but behind `-Pforge=true` and currently not building — see the gotcha below. |
 
 ## What is deliberately absent
 
@@ -109,6 +110,16 @@ Never an `INDEX.md`. Never a third documentation tree. The authority is
 * **ModDevGradle needs `maven.neoforged.net/mojang-meta`.** When that host is down, the
   Forge and NeoForge modules cannot configure at all, while Fabric and the Bukkit side are
   unaffected. Check it before assuming a build script is wrong.
+* **Forge does not build, and it is not a build-script bug.** NeoFormRuntime downloads
+  `net.minecraftforge:forge:<version>:universal-srg` through its own `ArtifactManager`,
+  outside Gradle's dependency resolution, so adding `maven.minecraftforge.net` to the module
+  or to `allprojects` does not help. The modules sit behind `-Pforge=true` so
+  `-Pmods=true build` stays green. Do not "fix" it by adding more repositories.
+* **`ResourceLocation` is `net.minecraft.resources.Identifier` in 1.21.11.** Mojang adopted
+  the Yarn-style name. Likewise `Player.sendSystemMessage` is now `displayClientMessage`,
+  and NeoForge splits the distributor into `PacketDistributor` (server) and
+  `ClientPacketDistributor` (client). When a Minecraft symbol is missing, read it out of the
+  built jar with `javap` rather than guessing from an older version's docs.
 * **Use `property = value`, never `property value`, in build scripts.** The space form is
   deprecated and is removed in Gradle 10. The build is checked with `--warning-mode all`.
 * **Plugin versions live in `pluginManagement` in `settings.gradle`**, read from

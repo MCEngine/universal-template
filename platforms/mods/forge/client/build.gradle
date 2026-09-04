@@ -4,6 +4,16 @@ plugins {
     id 'net.neoforged.moddev.legacyforge'
 }
 
+repositories {
+    // ModDevGradle adds the NeoForged repositories itself, but not this one, and
+    // the legacy Forge artifacts -- including the universal-srg jar its pipeline
+    // needs -- are published here only.
+    maven {
+        name = 'MinecraftForge'
+        url = 'https://maven.minecraftforge.net/'
+    }
+}
+
 legacyForge {
     version = providers.gradleProperty('forge-version').get()
 

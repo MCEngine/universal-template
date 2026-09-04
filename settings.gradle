@@ -62,10 +62,28 @@ include 'platforms:mods:core'
 // Set mods=true in gradle.properties to make it permanent.
 def modsEnabled = providers.gradleProperty('mods').map { it.toBoolean() }.getOrElse(false)
 if (modsEnabled) {
-    include 'platforms:mods:forge:client'
-    include 'platforms:mods:forge:server'
     include 'platforms:mods:fabric:client'
     include 'platforms:mods:fabric:server'
     include 'platforms:mods:neoforge:client'
     include 'platforms:mods:neoforge:server'
+}
+
+// Forge needs a second flag:
+//
+//   ./gradlew -Pmods=true -Pforge=true build
+//
+// Its modules are written and complete, but they do not currently build. The
+// legacy Forge support in ModDevGradle drives NeoFormRuntime, whose own
+// downloader fetches net.minecraftforge:forge:<version>:universal-srg outside
+// Gradle's dependency resolution -- so declaring maven.minecraftforge.net in the
+// module, or in allprojects, does not reach it, and the download fails even
+// though that artifact is published and reachable.
+//
+// Keeping Forge behind its own flag means `-Pmods=true build` stays green
+// instead of shipping a template whose documented command fails. See
+// wiki/environments/setup.md for what to try.
+def forgeEnabled = providers.gradleProperty('forge').map { it.toBoolean() }.getOrElse(false)
+if (modsEnabled && forgeEnabled) {
+    include 'platforms:mods:forge:client'
+    include 'platforms:mods:forge:server'
 }
